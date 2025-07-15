@@ -8,6 +8,8 @@ public class FolderOrganizer : EditorWindow
     {
         //Art folders
         FolderCreator("Art");
+        FolderCreator("3d","Art");
+        FolderCreator("2d","Art");
         FolderCreator("Animations","Art");
         FolderCreator("Prefabs","Art");
         FolderCreator("Shaders","Art");
