@@ -73,8 +73,6 @@ public class StackSpawner : MonoBehaviour
             hexagonInstance.Configure(hexStack);
             hexStack.AddHexagon(hexagonInstance);
         }
-        
-        Debug.LogError($"Generated {hexStack.Hexagons.Count} hexagons!");
     }
 
     private Color[] GetRandomColors()

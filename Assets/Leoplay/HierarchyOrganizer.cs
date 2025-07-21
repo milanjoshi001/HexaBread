@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class HierarchyOrganizer : EditorWindow
 {
     [MenuItem("Leoplay/Hierarchy Organizer")]
@@ -20,3 +21,4 @@ public class HierarchyOrganizer : EditorWindow
         GameObject emptyObject = new GameObject(name);
     }
 }
+#endif

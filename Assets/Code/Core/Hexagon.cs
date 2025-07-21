@@ -28,4 +28,32 @@ public class Hexagon : MonoBehaviour
     {
         transform.SetParent(parent);
     }
+
+    public void MoveToLocal(Vector3 targetLocalPos)
+    {
+        LeanTween.cancel(gameObject);
+
+        float delay = transform.GetSiblingIndex() * 0.01f;
+
+        LeanTween.moveLocal(gameObject, targetLocalPos, 0.2f)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setDelay(transform.GetSiblingIndex() * 0.01f);
+
+        Vector3 direction = (targetLocalPos - transform.localPosition).With(y: 0).normalized;
+        Vector3 rotationAxis = Vector3.Cross(Vector3.up, direction);
+
+        LeanTween.rotateAround(gameObject, rotationAxis, 180, 0.2f)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setDelay(delay);
+    }
+
+    public void Vanish(float delay)
+    {
+        LeanTween.cancel(gameObject);
+
+        LeanTween.scale(gameObject, Vector3.zero, 0.2f)
+            .setEase(LeanTweenType.easeInBack)
+            .setDelay(delay)
+            .setOnComplete(() => Destroy(gameObject));
+    }
 }

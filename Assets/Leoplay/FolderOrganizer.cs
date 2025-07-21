@@ -1,6 +1,5 @@
 using UnityEditor;
-using UnityEngine;
-
+#if UNITY_EDITOR
 public class FolderOrganizer : EditorWindow
 {
     [MenuItem("Leoplay/Folder Organizer")]
@@ -35,3 +34,4 @@ public class FolderOrganizer : EditorWindow
             AssetDatabase.CreateFolder($"Assets", name);
     }
 }
+#endif
