@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Level04
   m_EditorClassIdentifier: 
   _levelCompleteRequirement: 400
+  _levelGrid: {fileID: 4359761010019521209, guid: 1d988700bdf307b41931e5654e183b2e, type: 3}
