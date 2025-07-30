@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelComplete : MonoBehaviour
@@ -9,7 +8,11 @@ public class LevelComplete : MonoBehaviour
     private Canvas _canvas;
     
     [SerializeField] Button _restartButton;
-
+    
+    public static Action OnLevelComplete;
+    
+    private LevelData _nextLevelData;
+    
     private void Awake()
     {
         if(Instance == null)
@@ -36,7 +39,8 @@ public class LevelComplete : MonoBehaviour
 
     private void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        OnLevelComplete?.Invoke();
+        GridManager.Instance.LoadGrid(LevelManager.Instance.GetNextLevel().LevelGrid);
         _canvas.enabled = false;
     }
 }

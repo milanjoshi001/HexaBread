@@ -5,6 +5,15 @@ public class HexagonStack : MonoBehaviour
 {
     public List<Hexagon> Hexagons { get; private set; }
 
+    public void Initialize()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            AddHexagon(transform.GetChild(i).GetComponent<Hexagon>());
+        }
+        Place();
+    }
+
     public void AddHexagon(Hexagon hexagon)
     {
         if(Hexagons == null)
@@ -33,4 +42,5 @@ public class HexagonStack : MonoBehaviour
         if(Hexagons.Count <= 0)
             DestroyImmediate(gameObject);
     }
+
 }

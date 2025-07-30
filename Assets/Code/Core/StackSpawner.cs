@@ -21,11 +21,19 @@ public class StackSpawner : MonoBehaviour
     private void Awake()
     {
         StackController.OnStackPlaced += StackPlacedCallback;
+        LevelComplete.OnLevelComplete += ResetStacks;
+        LevelComplete.OnLevelComplete += GenerateStacks;
+
+        GameplayUI.OnStackRegenerate += RegenerateStack;
     }
 
     private void OnDestroy()
     {
         StackController.OnStackPlaced -= StackPlacedCallback;
+        LevelComplete.OnLevelComplete -= ResetStacks;
+        LevelComplete.OnLevelComplete -= GenerateStacks;
+        
+        GameplayUI.OnStackRegenerate -= RegenerateStack;
     }
 
     private void StackPlacedCallback(GridCell gridCell)
@@ -39,9 +47,26 @@ public class StackSpawner : MonoBehaviour
         }
     }
 
+    private void ResetStacks()
+    {
+        for (int i = 0; i < _stackPosParent.childCount; i++)
+        {
+            _stackPosParent.GetChild(i).Clear();
+        }
+
+        stackCounter = 0;
+    }
+
+    private void RegenerateStack()
+    {
+        ResetStacks();
+        GenerateStacks();
+    }
+
     private void Start()
     {
         GenerateStacks();
+        
     }
 
     private void GenerateStacks()

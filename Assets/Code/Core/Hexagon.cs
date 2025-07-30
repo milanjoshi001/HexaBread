@@ -35,14 +35,14 @@ public class Hexagon : MonoBehaviour
 
         float delay = transform.GetSiblingIndex() * 0.01f;
 
-        LeanTween.moveLocal(gameObject, targetLocalPos, 0.2f)
+        LeanTween.moveLocal(gameObject, targetLocalPos, 0.1f)
             .setEase(LeanTweenType.easeInOutSine)
             .setDelay(transform.GetSiblingIndex() * 0.01f);
 
         Vector3 direction = (targetLocalPos - transform.localPosition).With(y: 0).normalized;
         Vector3 rotationAxis = Vector3.Cross(Vector3.up, direction);
 
-        LeanTween.rotateAround(gameObject, rotationAxis, 180, 0.2f)
+        LeanTween.rotateAround(gameObject, rotationAxis, 180, 0.05f)
             .setEase(LeanTweenType.easeInOutSine)
             .setDelay(delay);
     }
