@@ -20,20 +20,11 @@ public class GameOverUI : MonoBehaviour
         
         if(TryGetComponent(out _canvas))
             _canvas.enabled = false;
-
-        MergeManager.OnGridCellOccupied += LevelFailed;
     }
     
     private void OnDestroy()
     {
         _restartButton.onClick.RemoveListener(RestartGame);
-    }
-    
-    private void Update()
-    {
-        if(MergeManager.Instance.CheckForOccupiedGrids())
-            LevelFailed();
-            
     }
     
     private void LevelFailed()

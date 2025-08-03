@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class MergeManager : MonoBehaviour
 {
@@ -13,15 +11,6 @@ public class MergeManager : MonoBehaviour
 
     public static Action<int> OnStackComplete;
 
-    private Coroutine _testCorutine;
-
-    public static Action OnGridCellOccupied;
-
-    private bool IsMoving;
-    private bool IsRemoving;
-    private bool IsCompleteMerge;
-    
-    
     private void Awake()
     {
         if(Instance == null)
@@ -43,10 +32,6 @@ public class MergeManager : MonoBehaviour
 
     private IEnumerator StackPlaced(GridCell gridCell)
     {
-        IsMoving = false;
-        IsRemoving = false;
-        IsCompleteMerge = false;
-        
         _updatedGridCells.Add(gridCell);
         while (_updatedGridCells.Count > 0)
             yield return CheckMerge(_updatedGridCells[0]);
@@ -73,15 +58,12 @@ public class MergeManager : MonoBehaviour
         List<Hexagon> hexagonsToAdd = GetHexagons(topHexagonColor, similarNeighborGridCells);
 
         RemoveHexagon(hexagonsToAdd, similarNeighborGridCells);
-
+        
         MoveHexagons(gridCell, hexagonsToAdd);
 
         yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.025f);
         
         yield return CheckForCompleteStack(gridCell, topHexagonColor);
-
-
-        yield return WaitForMerge();
     }
 
     #region Getting list of Hexagons
@@ -160,7 +142,6 @@ public class MergeManager : MonoBehaviour
                     neighborCellHexagonStack.Remove(hexagon);
             }
         }
-        IsRemoving = true;
     }
 
     private void MoveHexagons(GridCell gridCell, List<Hexagon> hexagonsToAdd)
@@ -177,7 +158,6 @@ public class MergeManager : MonoBehaviour
             gridCell.Stack.AddHexagon(hexagon);
             hexagon.MoveToLocal(targetLocalPos);
         }
-        IsMoving = true;
     }
 
     private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topHexagonColor)
@@ -215,24 +195,5 @@ public class MergeManager : MonoBehaviour
         _updatedGridCells.Add(gridCell);
         
         yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.01f);
-        
-        IsCompleteMerge = true;
-    }
-
-    private IEnumerator WaitForMerge()
-    {
-        yield return new WaitForSeconds(0.2f + (GridManager.Instance.GetGridCells().Count + 1) * 0.025f);
-        
-        if (!IsMoving || !IsRemoving || !IsCompleteMerge) yield break;
-        
-        yield return new WaitUntil(() => GridManager.Instance.GetGridCells().All(g => g.IsOccupied));
-        CheckForOccupiedGrids();
-    }
-
-    public bool CheckForOccupiedGrids()
-    {
-        if (GridManager.Instance.GetGridCells().All(g => g.IsOccupied)) return true;
-
-        return false;
     }
 }

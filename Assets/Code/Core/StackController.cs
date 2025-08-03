@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.EnhancedTouch;
-using TouchPhase = UnityEngine.TouchPhase;
 
 public class StackController : MonoBehaviour
 {
@@ -132,7 +128,7 @@ public class StackController : MonoBehaviour
         _currentStack.transform.position = _targetGridCell.transform.position.With(y: 0.2f);
         _currentStack.transform.SetParent(_targetGridCell.transform);
         _currentStack.Place();
-        
+
         _targetGridCell.AssignStack(_currentStack);
         
         OnStackPlaced?.Invoke(_targetGridCell);
