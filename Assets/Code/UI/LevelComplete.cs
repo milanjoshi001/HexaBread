@@ -35,6 +35,7 @@ public class LevelComplete : MonoBehaviour
     public void SetLevelComplete()
     {
         _canvas.enabled = true;
+        GridManager.Instance.ResetGridList();
     }
 
     private void RestartGame()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,11 +21,14 @@ public class GameOverUI : MonoBehaviour
         
         if(TryGetComponent(out _canvas))
             _canvas.enabled = false;
+
+        MergeManager.OnLastStackPlaced += LevelFailed;
     }
     
     private void OnDestroy()
     {
         _restartButton.onClick.RemoveListener(RestartGame);
+        MergeManager.OnLastStackPlaced -= LevelFailed;
     }
     
     private void LevelFailed()

@@ -10,6 +10,7 @@ public class GameplayUI : MonoBehaviour
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI _gridCompletedCounterText;
     [SerializeField] private Button _regenerateStackButton;
+    [SerializeField] private Button _removeStackButton;
 
     private int _targetAmount;
     private int _levelReq = 0;
@@ -29,23 +30,38 @@ public class GameplayUI : MonoBehaviour
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
 
-        LevelComplete.OnLevelComplete += ResetLevelText;
+        LevelComplete.OnLevelComplete += NextLevelText;
+        MergeManager.OnLastStackPlaced += CurrentLevelText;
         
         _regenerateStackButton.onClick.AddListener(RegenerateStack);
+        _removeStackButton.onClick.AddListener(RemoveStack);
     }
 
 
     private void OnDestroy()
     {
         MergeManager.OnStackComplete -= SetGridCompleteCounter;
-        LevelComplete.OnLevelComplete -= ResetLevelText;
+        LevelComplete.OnLevelComplete -= NextLevelText;
+        MergeManager.OnLastStackPlaced -= CurrentLevelText;
         
         _regenerateStackButton.onClick.RemoveListener(RegenerateStack);
+        _removeStackButton.onClick.RemoveListener(RemoveStack);
     }
 
     private void RegenerateStack() => OnStackRegenerate?.Invoke();
 
-    public void ResetLevelText()
+    private void RemoveStack()
+    {
+        
+    }
+
+    public void CurrentLevelText()
+    {
+        _gridCompletedCounterText.SetText($"{LevelManager.Instance.GetSameLevel().LevelCompleteRequirement}");
+        _gridCompletedCounterText.gameObject.SetActive(true);
+    }
+    
+    public void NextLevelText()
     {
         _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
         _levelReq = _targetAmount;

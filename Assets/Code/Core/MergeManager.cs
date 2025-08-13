@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MergeManager : MonoBehaviour
@@ -10,7 +11,9 @@ public class MergeManager : MonoBehaviour
     private List<GridCell> _updatedGridCells = new List<GridCell>();
 
     public static Action<int> OnStackComplete;
-
+    public static Action OnHexStackPlaced;
+    public static Action OnLastStackPlaced;
+    
     private void Awake()
     {
         if(Instance == null)
@@ -48,8 +51,15 @@ public class MergeManager : MonoBehaviour
         if (neighborGridCells.Count <= 0) yield break;
         
         Color topHexagonColor = gridCell.Stack.GetTopHexColor();
-
+        
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(topHexagonColor, neighborGridCells);
+        
+
+        if (similarNeighborGridCells.Count == 0 && GridManager.Instance.GridCells.All(cell => cell.IsOccupied))
+        {
+            OnLastStackPlaced?.Invoke();
+            Debug.LogError($"No similar grid cells exist!");
+        }
         
         if (similarNeighborGridCells.Count <= 0) yield break;
 
@@ -60,7 +70,6 @@ public class MergeManager : MonoBehaviour
         RemoveHexagon(hexagonsToAdd, similarNeighborGridCells);
         
         MoveHexagons(gridCell, hexagonsToAdd);
-
         yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.025f);
         
         yield return CheckForCompleteStack(gridCell, topHexagonColor);
@@ -141,6 +150,7 @@ public class MergeManager : MonoBehaviour
                 if (neighborCellHexagonStack.Contains(hexagon))
                     neighborCellHexagonStack.Remove(hexagon);
             }
+            neighborCellHexagonStack.SetTotalSimilarHexagons();
         }
     }
 
@@ -158,6 +168,9 @@ public class MergeManager : MonoBehaviour
             gridCell.Stack.AddHexagon(hexagon);
             hexagon.MoveToLocal(targetLocalPos);
         }
+        
+        gridCell.Stack.SetTotalSimilarHexagons();
+        OnHexStackPlaced?.Invoke();
     }
 
     private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topHexagonColor)
@@ -195,5 +208,8 @@ public class MergeManager : MonoBehaviour
         _updatedGridCells.Add(gridCell);
         
         yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.01f);
+        
+        gridCell.Stack.SetTotalSimilarHexagons();
+        OnHexStackPlaced?.Invoke();
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 public class HexagonStack : MonoBehaviour
 {
     public List<Hexagon> Hexagons { get; private set; }
+    private Color _currentHexagonColor;
+
+    private int _numOfSimilarHexagons = 0;
 
     public void Initialize()
     {
@@ -21,6 +24,27 @@ public class HexagonStack : MonoBehaviour
             
         Hexagons.Add(hexagon);
         hexagon.SetParent(transform);
+    }
+
+    private int TotalSimilarHexagons()
+    {
+        _numOfSimilarHexagons = 0;
+        _currentHexagonColor = GetTopHexColor();
+        
+        for (int i = 0; i < Hexagons.Count; i++)
+        {
+            if (Hexagons[i].Color == _currentHexagonColor)
+                _numOfSimilarHexagons++;
+        }
+        
+        return _numOfSimilarHexagons;
+    }
+
+    public void SetTotalSimilarHexagons()
+    {
+        if (Hexagons.Count < 1) return;
+        Hexagons[^1].EnableText(true);
+        Hexagons[^1].SetSimilarHexagonCount(TotalSimilarHexagons());
     }
 
     public void Place()

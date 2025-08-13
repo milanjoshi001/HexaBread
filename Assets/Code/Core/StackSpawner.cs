@@ -25,6 +25,7 @@ public class StackSpawner : MonoBehaviour
         LevelComplete.OnLevelComplete += GenerateStacks;
 
         GameplayUI.OnStackRegenerate += RegenerateStack;
+        MergeManager.OnLastStackPlaced += RegenerateStack;
     }
 
     private void OnDestroy()
@@ -34,6 +35,7 @@ public class StackSpawner : MonoBehaviour
         LevelComplete.OnLevelComplete -= GenerateStacks;
         
         GameplayUI.OnStackRegenerate -= RegenerateStack;
+        MergeManager.OnLastStackPlaced -= RegenerateStack;
     }
 
     private void StackPlacedCallback(GridCell gridCell)
@@ -98,6 +100,8 @@ public class StackSpawner : MonoBehaviour
             hexagonInstance.Configure(hexStack);
             hexStack.AddHexagon(hexagonInstance);
         }
+        
+        hexStack.SetTotalSimilarHexagons();
     }
 
     private Color[] GetRandomColors()

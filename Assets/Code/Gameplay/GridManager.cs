@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance;
+    public List<GridCell> GridCells => _gridCells;
     private List<GridCell> _gridCells = new List<GridCell>();
-
     
     private void Awake()
     {
@@ -26,9 +27,7 @@ public class GridManager : MonoBehaviour
             _gridCells.Add(grid.transform.GetChild(i).GetComponent<GridCell>());
         }
     }
-    
-    public List<GridCell> GetGridCells() => _gridCells;
-    
+
     public void ResetGridList() => _gridCells.Clear();
-    
+
 }

@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private LevelDataLibrary _levelDataLibrary;
 
+    public int CurrentLevelIndex => _currentLevelIndex;
 
     private int _currentLevelIndex = 0;
 
@@ -26,13 +27,13 @@ public class LevelManager : MonoBehaviour
     {
         _currentLevelIndex++;
         
-        GameplayUI.Instance.ResetLevelText();
+        GameplayUI.Instance.NextLevelText();
     }
 
 
     public LevelData GetNextLevel() => _levelDataLibrary.LevelDataList[_currentLevelIndex];
 
     public LevelData GetSameLevel() =>
-        _levelDataLibrary.LevelDataList[_currentLevelIndex == 0 ? _currentLevelIndex : _currentLevelIndex - 1];
+        _levelDataLibrary.LevelDataList[_currentLevelIndex];
 
 }
