@@ -126,7 +126,17 @@ public class StackSpawner : MonoBehaviour
         }
         
         Color secondColor = colorList.OrderBy(x => Random.value).First();
+
+        colorList.Remove(secondColor);
         
-        return new Color[] { firstColor, secondColor };
+        if (colorList.Count <= 0)
+        {
+            Debug.LogError("No color found!");
+            return null;
+        }
+        
+        Color thirdColor = colorList.OrderBy(x=>Random.value).First();
+        
+        return new Color[] { firstColor, secondColor, thirdColor };
     }
 }

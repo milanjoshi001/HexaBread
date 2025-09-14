@@ -13,6 +13,11 @@ public class MergeManager : MonoBehaviour
     public static Action<int> OnStackComplete;
     public static Action OnHexStackPlaced;
     public static Action OnLastStackPlaced;
+
+    private Coroutine _coroutine;
+
+    private bool _isMoving = false;
+    private bool _isRemoving = false;
     
     private void Awake()
     {
@@ -30,7 +35,10 @@ public class MergeManager : MonoBehaviour
 
     private void StackPlacedCallback(GridCell gridCell)
     {
-        StartCoroutine(StackPlaced(gridCell));
+        if (_coroutine != null)
+            StopCoroutine(StackPlaced(gridCell));
+        
+        _coroutine = StartCoroutine(StackPlaced(gridCell));
     }
 
     private IEnumerator StackPlaced(GridCell gridCell)
@@ -54,12 +62,9 @@ public class MergeManager : MonoBehaviour
         
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(topHexagonColor, neighborGridCells);
         
-
-        if (similarNeighborGridCells.Count == 0 && GridManager.Instance.GridCells.All(cell => cell.IsOccupied))
-        {
-            OnLastStackPlaced?.Invoke();
-            Debug.LogError($"No similar grid cells exist!");
-        }
+        yield return new WaitUntil(() => !_isMoving && !_isRemoving);
+        
+        CheckLevelFailed(similarNeighborGridCells);
         
         if (similarNeighborGridCells.Count <= 0) yield break;
 
@@ -70,6 +75,11 @@ public class MergeManager : MonoBehaviour
         RemoveHexagon(hexagonsToAdd, similarNeighborGridCells);
         
         MoveHexagons(gridCell, hexagonsToAdd);
+        
+        yield return new WaitUntil(() => !_isMoving && !_isRemoving);
+        
+        CheckLevelFailed(similarNeighborGridCells);
+        
         yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.025f);
         
         yield return CheckForCompleteStack(gridCell, topHexagonColor);
@@ -141,6 +151,7 @@ public class MergeManager : MonoBehaviour
 
     private void RemoveHexagon(List<Hexagon> hexagonsToAdd, List<GridCell> similarNeighborGridCells)
     {
+        _isRemoving = true;
         foreach (var neighborGridCell in similarNeighborGridCells)
         {
             HexagonStack neighborCellHexagonStack = neighborGridCell.Stack;
@@ -152,10 +163,12 @@ public class MergeManager : MonoBehaviour
             }
             neighborCellHexagonStack.SetTotalSimilarHexagons();
         }
+        _isRemoving = false;
     }
 
     private void MoveHexagons(GridCell gridCell, List<Hexagon> hexagonsToAdd)
     {
+        _isMoving = true;
         float initialY = gridCell.Stack.Hexagons.Count * 0.2f;
 
         for (int i = 0; i < hexagonsToAdd.Count; i++)
@@ -171,6 +184,7 @@ public class MergeManager : MonoBehaviour
         
         gridCell.Stack.SetTotalSimilarHexagons();
         OnHexStackPlaced?.Invoke();
+        _isMoving = false;
     }
 
     private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topHexagonColor)
@@ -208,8 +222,16 @@ public class MergeManager : MonoBehaviour
         _updatedGridCells.Add(gridCell);
         
         yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.01f);
-        
         gridCell.Stack.SetTotalSimilarHexagons();
         OnHexStackPlaced?.Invoke();
+    }
+
+    private void CheckLevelFailed(List<GridCell> gridCells)
+    {
+        if (gridCells.Count == 0 && GridManager.Instance.GridCells.All(cell => cell.IsOccupied))
+        {
+            OnLastStackPlaced?.Invoke();
+            Debug.LogError($"No similar grid cells exist!");
+        }
     }
 }
