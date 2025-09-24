@@ -23,8 +23,6 @@ public class GridGenerator : MonoBehaviour
 
                 if (spawnPos.magnitude > _grid.CellToWorld(new Vector3Int(1, 0, 0)).magnitude * _size) continue;
                 
-                //GameObject hexagon = Instantiate(_hexagon, spawnPos, Quaternion.identity, transform);
-                
                 var hexagon = (GameObject)PrefabUtility.InstantiatePrefab(_hexagon);
                 hexagon.transform.position = spawnPos;
                 hexagon.transform.rotation = Quaternion.identity;

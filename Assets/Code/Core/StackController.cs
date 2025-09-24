@@ -8,11 +8,17 @@ public class StackController : MonoBehaviour
     [SerializeField] LayerMask _hexagonLayerMask;
     [SerializeField] LayerMask _gridCellLayerMask;
     [SerializeField] LayerMask _groundCellLayerMask;
+    
+    [Header("Visuals")]
+    [SerializeField] private Color _hoverColor;
+    [SerializeField] private Color _resetGridCellColor;
+    
     private HexagonStack _currentStack;
     private Vector3 _currentStackInitialPos;
     
     [Header("Data")]
     private GridCell _targetGridCell;
+    private GridCell _prevCell;
 
     [Header("Actions")] 
     public static Action<GridCell> OnStackPlaced;
@@ -56,6 +62,7 @@ public class StackController : MonoBehaviour
 
 
         if (hit.collider == null) return;
+        _prevCell = null;
         _currentStack = hit.collider.GetComponent<Hexagon>().HexStack;
         _currentStackInitialPos = _currentStack.transform.position;
     }
@@ -91,6 +98,8 @@ public class StackController : MonoBehaviour
         _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
             currentStackTargetPosition, Time.deltaTime * 30);
 
+        GridManager.Instance.GridCells.ForEach(g => g.SetHexGridColor(_resetGridCellColor));
+
         _targetGridCell = null;
     }
 
@@ -111,6 +120,9 @@ public class StackController : MonoBehaviour
         _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
             currentStackTargetPosition, Time.deltaTime * 30);
         
+        _prevCell?.SetHexGridColor(_resetGridCellColor);
+        gridCell.SetHexGridColor(_hoverColor);
+        _prevCell = gridCell;
         _targetGridCell = gridCell;
     }
 
@@ -132,7 +144,7 @@ public class StackController : MonoBehaviour
         _targetGridCell.AssignStack(_currentStack);
         
         OnStackPlaced?.Invoke(_targetGridCell);
-        
+        _targetGridCell.SetHexGridColor(_resetGridCellColor);
         _targetGridCell = null;
         _currentStack = null;
     }

@@ -28,6 +28,9 @@ public class GridCell : MonoBehaviour
 
     public void AssignStack(HexagonStack stack) => this.Stack = stack;
 
+    public void SetHexGridColor(Color color) =>
+        transform.GetComponentInChildren<MeshRenderer>().material.color = color;
+
     private void GenerateInitialHexagons()
     {
         while (transform.childCount > 1)
