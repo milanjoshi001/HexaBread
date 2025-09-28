@@ -1,32 +1,31 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
 
 public class GridGenerator : MonoBehaviour
 {
-    [Header("Elements")]
-    [SerializeField] private Grid _grid;
-    [SerializeField] private GameObject _hexagon;
-    [SerializeField] private int _size;
-    
-    [ContextMenu("Generate")]
-    private void GenerateGrid()
+    public void GenerateGrid(Grid grid, GameObject hexagon, int size)
     {
+        int counter = 1;
         transform.Clear();
 
-        for (int x = -_size; x <= _size; x++)
+        for (int x = -size; x <= size; x++)
         {
-            for (int y = -_size; y <= _size; y++)
+            for (int y = -size; y <= size; y++)
             {
-                Vector3 spawnPos = _grid.CellToWorld(new Vector3Int(x, y, 0));
+                Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x, y, 0));
 
-                if (spawnPos.magnitude > _grid.CellToWorld(new Vector3Int(1, 0, 0)).magnitude * _size) continue;
+                if (spawnPos.magnitude > grid.CellToWorld(new Vector3Int(1, 0, 0)).magnitude * size) continue;
                 
-                var hexagon = (GameObject)PrefabUtility.InstantiatePrefab(_hexagon);
-                hexagon.transform.position = spawnPos;
-                hexagon.transform.rotation = Quaternion.identity;
-                hexagon.transform.parent = transform;
+                var hex = (GameObject)PrefabUtility.InstantiatePrefab(hexagon);
+                var counterValue = counter <= 9 ? $"0{counter}" : $"{counter}";
+                hex.name = $"{hexagon.name + counterValue}";
+                hex.transform.position = spawnPos;
+                hex.transform.rotation = Quaternion.identity;
+                hex.transform.parent = transform;
+                counter++;
             }
         }
     }
