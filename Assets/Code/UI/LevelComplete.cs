@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LevelComplete : MonoBehaviour
@@ -7,7 +8,7 @@ public class LevelComplete : MonoBehaviour
     public static LevelComplete Instance;
     private Canvas _canvas;
     
-    [SerializeField] Button _restartButton;
+    [SerializeField] Button _nextLevelButton;
     
     public static Action OnLevelComplete;
     
@@ -21,7 +22,7 @@ public class LevelComplete : MonoBehaviour
 
     private void Start()
     {
-        _restartButton.onClick.AddListener(RestartGame);
+        _nextLevelButton.onClick.AddListener(NextLevel);
         
         if(TryGetComponent(out _canvas))
             _canvas.enabled = false;
@@ -29,18 +30,19 @@ public class LevelComplete : MonoBehaviour
 
     private void OnDestroy()
     {
-        _restartButton.onClick.RemoveListener(RestartGame);
+        _nextLevelButton.onClick.RemoveListener(NextLevel);
     }
 
     public void SetLevelComplete()
     {
+        OnLevelComplete?.Invoke();
+        SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
         _canvas.enabled = true;
         GridManager.Instance.ResetGridList();
     }
 
-    private void RestartGame()
+    private void NextLevel()
     {
-        OnLevelComplete?.Invoke();
         GridManager.Instance.LoadGrid(LevelManager.Instance.GetNextLevel().LevelGrid);
         _canvas.enabled = false;
     }

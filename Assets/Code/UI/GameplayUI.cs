@@ -26,10 +26,6 @@ public class GameplayUI : MonoBehaviour
     private void Start()
     {
         MergeManager.OnStackComplete += SetGridCompleteCounter;
-        _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
-        _levelReq = _targetAmount;
-        _gridCompletedCounterText.SetText($"{_levelReq}");
-
         LevelComplete.OnLevelComplete += NextLevelText;
         MergeManager.OnLastStackPlaced += CurrentLevelText;
         
@@ -53,6 +49,13 @@ public class GameplayUI : MonoBehaviour
     private void RemoveStack()
     {
         
+    }
+
+    public void InitializeGame()
+    {
+        _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
+        _levelReq = _targetAmount;
+        _gridCompletedCounterText.SetText($"{_levelReq}");
     }
 
     public void CurrentLevelText()

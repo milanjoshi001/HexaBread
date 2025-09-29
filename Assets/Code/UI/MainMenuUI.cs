@@ -12,7 +12,7 @@ public class MainMenuUI : MonoBehaviour
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
 
-        _levelText.SetText($"Level {LevelManager.Instance.CurrentLevelIndex + 1}");
+        _levelText.SetText($"Level {SaveLoadManager.Instance.LoadGame()}");
     }
 
     private void OnDestroy()
@@ -22,6 +22,8 @@ public class MainMenuUI : MonoBehaviour
 
     private void PlayButtonCallback()
     {
+        GridManager.Instance.LoadGrid(LevelManager.Instance.LevelDataLibrary.LevelDataList[SaveLoadManager.Instance.LoadGame()].LevelGrid);
+        GameplayUI.Instance.InitializeGame();
         gameObject.SetActive(false);
     }
 }

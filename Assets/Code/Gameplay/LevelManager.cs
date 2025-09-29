@@ -4,10 +4,12 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
-
+    
     [SerializeField] private LevelDataLibrary _levelDataLibrary;
 
-    public int CurrentLevelIndex => _currentLevelIndex;
+    public LevelDataLibrary LevelDataLibrary => _levelDataLibrary;
+
+    public int CurrentLevel => _currentLevelIndex;
 
     private int _currentLevelIndex = 0;
 
@@ -19,8 +21,8 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        _currentLevelIndex = SaveLoadManager.Instance.LoadGame();
         LevelComplete.OnLevelComplete += NextLevelCounter;
-        GridManager.Instance.LoadGrid(_levelDataLibrary.LevelDataList[0].LevelGrid);
     }
 
     private void NextLevelCounter()
