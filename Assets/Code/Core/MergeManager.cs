@@ -19,6 +19,8 @@ public class MergeManager : MonoBehaviour
     private bool _isMoving = false;
     private bool _isRemoving = false;
     
+    private bool _levelCompleted = false;
+    
     private void Awake()
     {
         if(Instance == null)
@@ -63,7 +65,8 @@ public class MergeManager : MonoBehaviour
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(topHexagonColor, neighborGridCells);
         
         yield return new WaitUntil(() => !_isMoving && !_isRemoving);
-        
+
+        yield return new WaitForEndOfFrame();
         CheckLevelFailed(similarNeighborGridCells);
         
         if (similarNeighborGridCells.Count <= 0) yield break;
@@ -78,6 +81,7 @@ public class MergeManager : MonoBehaviour
         
         yield return new WaitUntil(() => !_isMoving && !_isRemoving);
         
+        yield return new WaitForEndOfFrame();
         CheckLevelFailed(similarNeighborGridCells);
         
         yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.025f);
@@ -205,6 +209,8 @@ public class MergeManager : MonoBehaviour
         int similarHexagonCount = similarHexagons.Count;
         
         if (similarHexagons.Count < 10) yield break;
+        
+        _levelCompleted = true;
 
         float delay = 0;
 
@@ -228,6 +234,9 @@ public class MergeManager : MonoBehaviour
 
     private void CheckLevelFailed(List<GridCell> gridCells)
     {
+        if (_levelCompleted) return;
+        if (GridManager.Instance.GridCells == null) return;
+        
         if (gridCells.Count == 0 && GridManager.Instance.GridCells.All(cell => cell.IsOccupied))
         {
             OnLastStackPlaced?.Invoke();

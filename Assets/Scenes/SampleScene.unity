@@ -898,6 +898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0976d70adf771f747882943600205472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvas: {fileID: 573788570}
   _restartButton: {fileID: 1367744379}
 --- !u!1 &705507993
 GameObject:
@@ -3774,6 +3775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6b58335c2d45f4ab5d7103df03ff57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvas: {fileID: 2099493167}
   _nextLevelButton: {fileID: 2139977813}
 --- !u!1 &2139977811
 GameObject:

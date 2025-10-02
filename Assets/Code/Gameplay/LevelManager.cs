@@ -22,15 +22,10 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         _currentLevelIndex = SaveLoadManager.Instance.LoadGame();
-        LevelComplete.OnLevelComplete += NextLevelCounter;
+        LevelCompleteUI.OnLevelComplete += NextLevelCounter;
     }
 
-    private void NextLevelCounter()
-    {
-        _currentLevelIndex++;
-        
-        GameplayUI.Instance.NextLevelText();
-    }
+    private void NextLevelCounter() => _currentLevelIndex++;
 
 
     public LevelData GetNextLevel() => _levelDataLibrary.LevelDataList[_currentLevelIndex];

@@ -1,12 +1,11 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
     public static GameOverUI Instance;
-    private Canvas _canvas;
     
+    [SerializeField] private Canvas _canvas;    
     [SerializeField] Button _restartButton;
     
     private void Awake()
@@ -18,9 +17,8 @@ public class GameOverUI : MonoBehaviour
     private void Start()
     {
         _restartButton.onClick.AddListener(RestartGame);
-        
-        if(TryGetComponent(out _canvas))
-            _canvas.enabled = false;
+       
+        _canvas.enabled = false;
 
         MergeManager.OnLastStackPlaced += LevelFailed;
     }
@@ -33,12 +31,14 @@ public class GameOverUI : MonoBehaviour
     
     private void LevelFailed()
     {
+        InputManager.Instance.gameObject.SetActive(false);
         _canvas.enabled = true;
         GridManager.Instance.ResetGridList();
     }
 
     private void RestartGame()
     {
+        InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
         GridManager.Instance.LoadGrid(LevelManager.Instance.GetSameLevel().LevelGrid);
     }

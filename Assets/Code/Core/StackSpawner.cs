@@ -21,8 +21,8 @@ public class StackSpawner : MonoBehaviour
     private void Awake()
     {
         StackController.OnStackPlaced += StackPlacedCallback;
-        LevelComplete.OnLevelComplete += ResetStacks;
-        LevelComplete.OnLevelComplete += GenerateStacks;
+        LevelCompleteUI.OnLevelComplete += ResetStacks;
+        LevelCompleteUI.OnLevelComplete += GenerateStacks;
 
         GameplayUI.OnStackRegenerate += RegenerateStack;
         MergeManager.OnLastStackPlaced += RegenerateStack;
@@ -31,8 +31,8 @@ public class StackSpawner : MonoBehaviour
     private void OnDestroy()
     {
         StackController.OnStackPlaced -= StackPlacedCallback;
-        LevelComplete.OnLevelComplete -= ResetStacks;
-        LevelComplete.OnLevelComplete -= GenerateStacks;
+        LevelCompleteUI.OnLevelComplete -= ResetStacks;
+        LevelCompleteUI.OnLevelComplete -= GenerateStacks;
         
         GameplayUI.OnStackRegenerate -= RegenerateStack;
         MergeManager.OnLastStackPlaced -= RegenerateStack;

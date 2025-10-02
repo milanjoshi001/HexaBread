@@ -12,7 +12,7 @@ public class MainMenuUI : MonoBehaviour
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
 
-        _levelText.SetText($"Level {SaveLoadManager.Instance.LoadGame()}");
+        _levelText.SetText($"Level {SaveLoadManager.Instance.LoadGame() + 1}");
     }
 
     private void OnDestroy()

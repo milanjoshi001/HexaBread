@@ -26,7 +26,7 @@ public class GameplayUI : MonoBehaviour
     private void Start()
     {
         MergeManager.OnStackComplete += SetGridCompleteCounter;
-        LevelComplete.OnLevelComplete += NextLevelText;
+        LevelCompleteUI.OnLevelComplete += NextLevelText;
         MergeManager.OnLastStackPlaced += CurrentLevelText;
         
         _regenerateStackButton.onClick.AddListener(RegenerateStack);
@@ -37,7 +37,7 @@ public class GameplayUI : MonoBehaviour
     private void OnDestroy()
     {
         MergeManager.OnStackComplete -= SetGridCompleteCounter;
-        LevelComplete.OnLevelComplete -= NextLevelText;
+        LevelCompleteUI.OnLevelComplete -= NextLevelText;
         MergeManager.OnLastStackPlaced -= CurrentLevelText;
         
         _regenerateStackButton.onClick.RemoveListener(RegenerateStack);
@@ -58,7 +58,7 @@ public class GameplayUI : MonoBehaviour
         _gridCompletedCounterText.SetText($"{_levelReq}");
     }
 
-    public void CurrentLevelText()
+    private void CurrentLevelText()
     {
         _gridCompletedCounterText.SetText($"{LevelManager.Instance.GetSameLevel().LevelCompleteRequirement}");
         _gridCompletedCounterText.gameObject.SetActive(true);
@@ -66,6 +66,7 @@ public class GameplayUI : MonoBehaviour
     
     public void NextLevelText()
     {
+        _targetAmount = 0;
         _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
@@ -77,7 +78,7 @@ public class GameplayUI : MonoBehaviour
         _levelReq -= counter;
         if (_levelReq <= 0)
         {
-            LevelComplete.Instance.SetLevelComplete();
+            LevelCompleteUI.Instance.SetLevelComplete();
             _gridCompletedCounterText.gameObject.SetActive(false);
             return;
         }
