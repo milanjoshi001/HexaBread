@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,10 @@ public class MainMenuUI : MonoBehaviour
     private void Start()
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
+    }
 
+    private void OnEnable()
+    {
         _levelText.SetText($"Level {SaveLoadManager.Instance.LoadGame() + 1}");
     }
 

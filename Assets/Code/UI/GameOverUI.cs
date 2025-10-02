@@ -31,6 +31,7 @@ public class GameOverUI : MonoBehaviour
     
     private void LevelFailed()
     {
+        LifeManager.Instance.LifeGone();
         InputManager.Instance.gameObject.SetActive(false);
         _canvas.enabled = true;
         GridManager.Instance.ResetGridList();
