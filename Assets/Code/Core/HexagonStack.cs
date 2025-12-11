@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,21 @@ public class HexagonStack : MonoBehaviour
     private Color _currentHexagonColor;
 
     private int _numOfSimilarHexagons = 0;
+    private List<Hexagon> _refreshedHexagons = new List<Hexagon>();
+
+    private void Start()
+    {
+        GameplayUI.OnStackCollapsed += StackCollidersEnabled;
+        GameplayUI.OnSwapStack += StackCollidersEnabled;
+        GameplayUI.OnPowerUpCanceled += StackColliderDisabled;
+    }
+
+    private void OnDestroy()
+    {
+        GameplayUI.OnStackCollapsed -= StackCollidersEnabled;
+        GameplayUI.OnSwapStack -= StackCollidersEnabled;
+        GameplayUI.OnPowerUpCanceled -= StackColliderDisabled;
+    }
 
     public void Initialize()
     {
@@ -24,6 +40,32 @@ public class HexagonStack : MonoBehaviour
             
         Hexagons.Add(hexagon);
         hexagon.SetParent(transform);
+    }
+
+    private void StackColliderDisabled()
+    {
+        if (_refreshedHexagons == null || _refreshedHexagons.Count <= 0) return;
+        _refreshedHexagons[^1].ActivateCollider(false);
+    }
+    
+    private void StackCollidersEnabled()
+    {
+        RefreshHexagonsList();
+        if(_refreshedHexagons == null) return;
+        _refreshedHexagons[^1].ActivateCollider(true);
+    }
+
+    private void RefreshHexagonsList()
+    {
+        _refreshedHexagons.Clear();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            var hexagon = transform.GetChild(i).GetComponent<Hexagon>();
+            if(_refreshedHexagons == null)
+                _refreshedHexagons = new List<Hexagon>();
+            
+            _refreshedHexagons.Add(hexagon);
+        }
     }
 
     private int TotalSimilarHexagons()
@@ -51,7 +93,7 @@ public class HexagonStack : MonoBehaviour
     {
         foreach (var hexagon in Hexagons)
         {
-            hexagon.DisableCollider();
+            hexagon.ActivateCollider(false);
         }
     }
 
@@ -66,5 +108,7 @@ public class HexagonStack : MonoBehaviour
         if(Hexagons.Count <= 0)
             DestroyImmediate(gameObject);
     }
+    
+    public void StackDestroy() => Destroy(gameObject);
 
 }

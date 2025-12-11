@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +5,8 @@ using Random = UnityEngine.Random;
 
 public class StackSpawner : MonoBehaviour
 {
+    public static StackSpawner Instance;
+    
     [Header("Elements")] 
     [SerializeField] private Transform _stackPosParent;
     [SerializeField] private Hexagon _hexagonPrefab;
@@ -16,16 +17,27 @@ public class StackSpawner : MonoBehaviour
     [SerializeField] private Vector2Int _minMaxHexCount;
     [SerializeField] private Color[] _colors;
 
+    public List<HexagonStack> Stacks { get; private set; } = new List<HexagonStack>();
+
     private int stackCounter;
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        
         StackController.OnStackPlaced += StackPlacedCallback;
         LevelCompleteUI.OnLevelComplete += ResetStacks;
         LevelCompleteUI.OnLevelComplete += GenerateStacks;
 
         GameplayUI.OnStackRegenerate += RegenerateStack;
         MergeManager.OnLastStackPlaced += RegenerateStack;
+    }
+    
+    private void Start()
+    {
+        GenerateStacks();
+        GameplayUI.OnStackCollapsed += DisableStackParent;
     }
 
     private void OnDestroy()
@@ -36,7 +48,11 @@ public class StackSpawner : MonoBehaviour
         
         GameplayUI.OnStackRegenerate -= RegenerateStack;
         MergeManager.OnLastStackPlaced -= RegenerateStack;
+        GameplayUI.OnStackCollapsed -= DisableStackParent;
     }
+
+    private void DisableStackParent() => _stackPosParent.gameObject.SetActive(false);
+    public void EnableStackParent() => _stackPosParent.gameObject.SetActive(true);
 
     private void StackPlacedCallback(GridCell gridCell)
     {
@@ -63,12 +79,6 @@ public class StackSpawner : MonoBehaviour
     {
         ResetStacks();
         GenerateStacks();
-    }
-
-    private void Start()
-    {
-        GenerateStacks();
-        
     }
 
     private void GenerateStacks()
@@ -102,6 +112,8 @@ public class StackSpawner : MonoBehaviour
         }
         
         hexStack.SetTotalSimilarHexagons();
+        
+        Stacks.Add(hexStack);
     }
 
     private Color[] GetRandomColors()

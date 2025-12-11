@@ -9,13 +9,27 @@ public class GameplayUI : MonoBehaviour
     
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI _gridCompletedCounterText;
+    
+    [Header("Confirmation Panels")]
+    [SerializeField] GameObject _confirmationPanel;
+    [SerializeField] GameObject _powerUpsPanel;
+    
+    [Header("Buttons")]
     [SerializeField] private Button _regenerateStackButton;
     [SerializeField] private Button _removeStackButton;
+    [SerializeField] private Button _acceptPowerUpButton;
+    [SerializeField] private Button _swapStackButton;
+    [SerializeField] private Button _closeConfirmationButton;
+    
+    public bool IsStackDestroyerOn { get; private set; }
 
     private int _targetAmount;
     private int _levelReq = 0;
 
     public static Action OnStackRegenerate;
+    public static Action OnStackCollapsed;
+    public static Action OnPowerUpCanceled;
+    public static Action OnSwapStack;
 
     private void Awake()
     {
@@ -31,6 +45,9 @@ public class GameplayUI : MonoBehaviour
         
         _regenerateStackButton.onClick.AddListener(RegenerateStack);
         _removeStackButton.onClick.AddListener(RemoveStack);
+        _acceptPowerUpButton.onClick.AddListener(AcceptStackRegeneration);
+        _closeConfirmationButton.onClick.AddListener(PowerUpCanceled);
+        _swapStackButton.onClick.AddListener(SwapStack);
     }
 
 
@@ -42,13 +59,50 @@ public class GameplayUI : MonoBehaviour
         
         _regenerateStackButton.onClick.RemoveListener(RegenerateStack);
         _removeStackButton.onClick.RemoveListener(RemoveStack);
+        _acceptPowerUpButton.onClick.RemoveListener(AcceptStackRegeneration);
+        _closeConfirmationButton.onClick.RemoveListener(PowerUpCanceled);
+        _swapStackButton.onClick.RemoveListener(SwapStack);
     }
 
-    private void RegenerateStack() => OnStackRegenerate?.Invoke();
+    private void RegenerateStack()
+    {
+        _acceptPowerUpButton.gameObject.SetActive(true);
+        ConfirmationPanelActivation(true);
+    }
+
+    private void AcceptStackRegeneration()
+    {
+        ConfirmationPanelActivation(false);
+        OnStackRegenerate?.Invoke();
+    }
+
+    private void SwapStack()
+    {
+        _acceptPowerUpButton.gameObject.SetActive(false);
+        ConfirmationPanelActivation(true);
+        OnSwapStack?.Invoke();
+    }
 
     private void RemoveStack()
     {
-        
+        _acceptPowerUpButton.gameObject.SetActive(false);
+        ConfirmationPanelActivation(true);
+        IsStackDestroyerOn = true;
+        OnStackCollapsed?.Invoke();
+    }
+
+    private void PowerUpCanceled()
+    {
+        ConfirmationPanelActivation(false);
+        IsStackDestroyerOn = false;
+        StackSpawner.Instance.EnableStackParent();
+        OnPowerUpCanceled?.Invoke();
+    }
+    
+    public void ConfirmationPanelActivation(bool value)
+    {
+        _confirmationPanel.SetActive(value);
+        _powerUpsPanel.SetActive(!value);
     }
 
     public void InitializeGame()
@@ -72,6 +126,13 @@ public class GameplayUI : MonoBehaviour
         _gridCompletedCounterText.SetText($"{_levelReq}");
         _gridCompletedCounterText.gameObject.SetActive(true);
     }
+
+    public void TotalHexagonsRemoved(int count)
+    {
+        _gridCompletedCounterText.SetText($"{_targetAmount -= count}");
+    }
+    
+    public void SetDestroyer(bool value) => IsStackDestroyerOn = value;
     
     private void SetGridCompleteCounter(int counter)
     {

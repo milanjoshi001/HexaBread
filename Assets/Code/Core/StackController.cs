@@ -34,6 +34,9 @@ public class StackController : MonoBehaviour
                 {
                     ManageClick(ctx);
                 }
+                
+                if(GameplayUI.Instance.IsStackDestroyerOn)
+                    ManageStackDestroyer(ctx);
             };
             
             InputManager.Instance.InputAction.FindAction("Drag").performed += ctx =>
@@ -54,8 +57,31 @@ public class StackController : MonoBehaviour
         }
     }
 
+    private void ManageStackDestroyer(InputAction.CallbackContext ctx)
+    {
+        if(!GameplayUI.Instance.IsStackDestroyerOn) return;
+        
+        if(!ctx.action.WasPerformedThisFrame()) return;
+
+        RaycastHit hit;
+        Physics.Raycast(GetClickedRay(), out hit, 500f, _hexagonLayerMask);
+        
+        if(hit.collider == null) return;
+        
+        HexagonStack stack = hit.collider.gameObject.GetComponent<Hexagon>().GetComponentInParent<HexagonStack>();
+        if (stack == null)
+            return;
+        
+        GameplayUI.Instance.TotalHexagonsRemoved(stack.Hexagons.Count);
+        stack.StackDestroy();
+        GameplayUI.Instance.SetDestroyer(false);
+        GameplayUI.Instance.ConfirmationPanelActivation(false);
+        StackSpawner.Instance.EnableStackParent();
+    }
+
     private void ManageClick(InputAction.CallbackContext ctx)
     {
+        if(GameplayUI.Instance.IsStackDestroyerOn) return;
         if(!ctx.action.WasPerformedThisFrame()) return;
         RaycastHit hit;
         Physics.Raycast(GetClickedRay(), out hit,500f, _hexagonLayerMask);
@@ -70,6 +96,7 @@ public class StackController : MonoBehaviour
 
     private void ManageDrag(InputAction.CallbackContext ctx)
     {
+        if(GameplayUI.Instance.IsStackDestroyerOn) return;
         if(!ctx.action.WasPerformedThisFrame()) return;
 
         RaycastHit hit;
@@ -142,6 +169,8 @@ public class StackController : MonoBehaviour
         _currentStack.Place();
 
         _targetGridCell.AssignStack(_currentStack);
+        _prevCell.AssignStack(null);
+        
         
         OnStackPlaced?.Invoke(_targetGridCell);
         _targetGridCell.SetHexGridColor(_resetGridCellColor);

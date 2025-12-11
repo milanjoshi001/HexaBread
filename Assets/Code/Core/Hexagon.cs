@@ -20,10 +20,10 @@ public class Hexagon : MonoBehaviour
     {
         HexStack = hexStack;
     }
-
-    public void DisableCollider()
+    
+    public void ActivateCollider(bool value)
     {
-        _hexagonCollider.enabled = false;
+        _hexagonCollider.enabled = value;
     }
 
     public void SetSimilarHexagonCount(int value)
