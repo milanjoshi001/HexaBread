@@ -9,6 +9,7 @@ public class GameplayUI : MonoBehaviour
     
     [Header("Elements")]
     [SerializeField] private TextMeshProUGUI _gridCompletedCounterText;
+    [SerializeField] Image _fillImage;
     
     [Header("Confirmation Panels")]
     [SerializeField] GameObject _confirmationPanel;
@@ -22,6 +23,7 @@ public class GameplayUI : MonoBehaviour
     [SerializeField] private Button _closeConfirmationButton;
     
     public bool IsStackDestroyerOn { get; private set; }
+    public bool IsStackSwaperOn { get; private set; }
 
     private int _targetAmount;
     private int _levelReq = 0;
@@ -80,6 +82,8 @@ public class GameplayUI : MonoBehaviour
     {
         _acceptPowerUpButton.gameObject.SetActive(false);
         ConfirmationPanelActivation(true);
+        StackSpawner.Instance.Activate(false);
+        IsStackSwaperOn = true;
         OnSwapStack?.Invoke();
     }
 
@@ -94,7 +98,9 @@ public class GameplayUI : MonoBehaviour
     private void PowerUpCanceled()
     {
         ConfirmationPanelActivation(false);
+        StackSpawner.Instance.Activate(true);
         IsStackDestroyerOn = false;
+        IsStackSwaperOn = false;
         StackSpawner.Instance.EnableStackParent();
         OnPowerUpCanceled?.Invoke();
     }
@@ -129,10 +135,13 @@ public class GameplayUI : MonoBehaviour
 
     public void TotalHexagonsRemoved(int count)
     {
+        _levelReq -= count;
+        _fillImage.fillAmount = _targetAmount - _levelReq / 100f;
         _gridCompletedCounterText.SetText($"{_targetAmount -= count}");
     }
     
     public void SetDestroyer(bool value) => IsStackDestroyerOn = value;
+    public void SetSwapper(bool value) => IsStackSwaperOn = value;
     
     private void SetGridCompleteCounter(int counter)
     {
@@ -143,7 +152,8 @@ public class GameplayUI : MonoBehaviour
             _gridCompletedCounterText.gameObject.SetActive(false);
             return;
         }
-        
+
+        _fillImage.fillAmount = _targetAmount - _levelReq / 100f;
         _gridCompletedCounterText.SetText($"{_levelReq}");
     }
 }

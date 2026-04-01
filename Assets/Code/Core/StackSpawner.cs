@@ -116,6 +116,8 @@ public class StackSpawner : MonoBehaviour
         Stacks.Add(hexStack);
     }
 
+    public void Activate(bool value) => _stackPosParent.gameObject.SetActive(value);
+
     private Color[] GetRandomColors()
     {
         List<Color> colorList = new List<Color>();

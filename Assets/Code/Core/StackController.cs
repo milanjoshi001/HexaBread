@@ -19,6 +19,7 @@ public class StackController : MonoBehaviour
     [Header("Data")]
     private GridCell _targetGridCell;
     private GridCell _prevCell;
+    private GridCell _swapperCell;
 
     [Header("Actions")] 
     public static Action<GridCell> OnStackPlaced;
@@ -91,6 +92,8 @@ public class StackController : MonoBehaviour
         _prevCell = null;
         _currentStack = hit.collider.GetComponent<Hexagon>().HexStack;
         _currentStackInitialPos = _currentStack.transform.position;
+        if(_currentStack != null && GameplayUI.Instance.IsStackSwaperOn)
+            _swapperCell = _currentStack.GetComponentInParent<GridCell>();
     }
 
 
@@ -146,7 +149,6 @@ public class StackController : MonoBehaviour
 
         _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
             currentStackTargetPosition, Time.deltaTime * 30);
-        
         _prevCell?.SetHexGridColor(_resetGridCellColor);
         gridCell.SetHexGridColor(_hoverColor);
         _prevCell = gridCell;
@@ -156,6 +158,13 @@ public class StackController : MonoBehaviour
     private void ManageDrop(InputAction.CallbackContext ctx)
     {
         if(!ctx.action.WasPerformedThisFrame()) return;
+
+        if(GameplayUI.Instance.IsStackSwaperOn)
+        {
+            _swapperCell?.AssignStack(null);
+            GameplayUI.Instance.ConfirmationPanelActivation(false);
+            GameplayUI.Instance.SetSwapper(false);
+        }
 
         if (_targetGridCell == null)
         {
@@ -169,9 +178,6 @@ public class StackController : MonoBehaviour
         _currentStack.Place();
 
         _targetGridCell.AssignStack(_currentStack);
-        _prevCell.AssignStack(null);
-        
-        
         OnStackPlaced?.Invoke(_targetGridCell);
         _targetGridCell.SetHexGridColor(_resetGridCellColor);
         _targetGridCell = null;
