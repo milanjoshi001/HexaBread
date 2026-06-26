@@ -13,7 +13,6 @@ public class StackSpawner : MonoBehaviour
     [SerializeField] private HexagonStack _hexagonStackPrefab;
 
     [Header("Settings")]
-    [NaughtyAttributes.MinMaxSlider(2,8)]
     [SerializeField] private Vector2Int _minMaxHexCount;
     [SerializeField] private Color[] _colors;
 
