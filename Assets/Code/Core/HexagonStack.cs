@@ -12,16 +12,16 @@ public class HexagonStack : MonoBehaviour
 
     private void Start()
     {
-        GameplayUI.OnStackCollapsed += StackCollidersEnabled;
-        GameplayUI.OnSwapStack += StackCollidersEnabled;
-        GameplayUI.OnPowerUpCanceled += StackColliderDisabled;
+        PowerUpUI.OnStackCollapsed += StackCollidersEnabled;
+        PowerUpUI.OnSwapStack += StackCollidersEnabled;
+        PowerUpUI.OnPowerUpCanceled += StackColliderDisabled;
     }
 
     private void OnDestroy()
     {
-        GameplayUI.OnStackCollapsed -= StackCollidersEnabled;
-        GameplayUI.OnSwapStack -= StackCollidersEnabled;
-        GameplayUI.OnPowerUpCanceled -= StackColliderDisabled;
+        PowerUpUI.OnStackCollapsed -= StackCollidersEnabled;
+        PowerUpUI.OnSwapStack -= StackCollidersEnabled;
+        PowerUpUI.OnPowerUpCanceled -= StackColliderDisabled;
     }
 
     public void Initialize()

@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Utils;
 using UnityEngine;
 
-public class MergeManager : MonoBehaviour
+public class MergeManager : Singleton<MergeManager>
 {
-    public static MergeManager Instance;
     [Header("Elements")]
     private List<GridCell> _updatedGridCells = new List<GridCell>();
 
@@ -16,15 +16,9 @@ public class MergeManager : MonoBehaviour
 
     private Coroutine _coroutine;
 
-    private bool _isMoving = false;
-    private bool _isRemoving = false;
-    
-    private bool _levelCompleted = false;
-    
-    private void Awake()
+
+    protected override void Awake()
     {
-        if(Instance == null)
-            Instance = this;
         
         Application.targetFrameRate = 60;
         StackController.OnStackPlaced += StackPlacedCallback;
@@ -38,7 +32,7 @@ public class MergeManager : MonoBehaviour
     private void StackPlacedCallback(GridCell gridCell)
     {
         if (_coroutine != null)
-            StopCoroutine(StackPlaced(gridCell));
+            StopCoroutine(_coroutine);
         
         _coroutine = StartCoroutine(StackPlaced(gridCell));
     }
@@ -48,28 +42,34 @@ public class MergeManager : MonoBehaviour
         _updatedGridCells.Add(gridCell);
         while (_updatedGridCells.Count > 0)
             yield return CheckMerge(_updatedGridCells[0]);
+        
+        CheckLevelFailed();
     }
 
     private IEnumerator CheckMerge(GridCell gridCell)
     {
+        Debug.Log("CheckMerge");
         _updatedGridCells.Remove(gridCell);
 
         if (!gridCell.IsOccupied) yield break;
 
         List<GridCell> neighborGridCells = GetNeighborGridCells(gridCell);
 
-        if (neighborGridCells.Count <= 0) yield break;
+        if (neighborGridCells.Count <= 0)
+        {
+            yield break;
+        }
         
         Color topHexagonColor = gridCell.Stack.GetTopHexColor();
         
         List<GridCell> similarNeighborGridCells = GetSimilarNeighborGridCells(topHexagonColor, neighborGridCells);
         
-        yield return new WaitUntil(() => !_isMoving && !_isRemoving);
-
-        yield return new WaitForEndOfFrame();
-        CheckLevelFailed(similarNeighborGridCells);
         
-        if (similarNeighborGridCells.Count <= 0) yield break;
+        if (similarNeighborGridCells.Count <= 0)
+        {
+            Debug.Log("No similar neighbours");
+            yield break;
+        }
 
         _updatedGridCells.AddRange(similarNeighborGridCells);
         
@@ -79,10 +79,6 @@ public class MergeManager : MonoBehaviour
         
         MoveHexagons(gridCell, hexagonsToAdd);
         
-        yield return new WaitUntil(() => !_isMoving && !_isRemoving);
-        
-        yield return new WaitForEndOfFrame();
-        CheckLevelFailed(similarNeighborGridCells);
         
         yield return new WaitForSeconds(0.2f + (hexagonsToAdd.Count + 1) * 0.025f);
         
@@ -155,7 +151,6 @@ public class MergeManager : MonoBehaviour
 
     private void RemoveHexagon(List<Hexagon> hexagonsToAdd, List<GridCell> similarNeighborGridCells)
     {
-        _isRemoving = true;
         foreach (var neighborGridCell in similarNeighborGridCells)
         {
             HexagonStack neighborCellHexagonStack = neighborGridCell.Stack;
@@ -167,12 +162,10 @@ public class MergeManager : MonoBehaviour
             }
             neighborCellHexagonStack.SetTotalSimilarHexagons();
         }
-        _isRemoving = false;
     }
 
     private void MoveHexagons(GridCell gridCell, List<Hexagon> hexagonsToAdd)
     {
-        _isMoving = true;
         float initialY = gridCell.Stack.Hexagons.Count * 0.2f;
 
         for (int i = 0; i < hexagonsToAdd.Count; i++)
@@ -188,7 +181,6 @@ public class MergeManager : MonoBehaviour
         
         gridCell.Stack.SetTotalSimilarHexagons();
         OnHexStackPlaced?.Invoke();
-        _isMoving = false;
     }
 
     private IEnumerator CheckForCompleteStack(GridCell gridCell, Color topHexagonColor)
@@ -210,8 +202,6 @@ public class MergeManager : MonoBehaviour
         
         if (similarHexagons.Count < 10) yield break;
         
-        _levelCompleted = true;
-
         float delay = 0;
 
         while (similarHexagons.Count > 0)
@@ -231,16 +221,38 @@ public class MergeManager : MonoBehaviour
         gridCell.Stack.SetTotalSimilarHexagons();
         OnHexStackPlaced?.Invoke();
     }
-
-    private void CheckLevelFailed(List<GridCell> gridCells)
+    
+    private bool HasAnyPossibleMerge()
     {
-        if (_levelCompleted) return;
-        if (GridManager.Instance.GridCells == null) return;
-        
-        if (gridCells.Count == 0 && GridManager.Instance.GridCells.All(cell => cell.IsOccupied))
+        foreach (var cell in GridManager.Instance.GridCells)
         {
-            OnLastStackPlaced?.Invoke();
-            Debug.LogError($"No similar grid cells exist!");
+            if (!cell.IsOccupied)
+                return true;
+
+            Color color = cell.Stack.GetTopHexColor();
+
+            foreach (var neighbour in GetNeighborGridCells(cell))
+            {
+                if (neighbour.Stack.GetTopHexColor() == color)
+                    return true;
+            }
         }
+
+        return false;
+    }
+
+    private void CheckLevelFailed()
+    {
+        if (LevelCompleteUI.Instance.IsLevelCompleted)
+            return;
+        
+        if (GameplayUI.Instance.IsLevelComplete)
+            return;
+
+        if (HasAnyPossibleMerge())
+            return;
+
+        Debug.Log("GAME OVER");
+        OnLastStackPlaced?.Invoke();
     }
 }

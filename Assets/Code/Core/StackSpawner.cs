@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Code.Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class StackSpawner : MonoBehaviour
+public class StackSpawner : Singleton<StackSpawner>
 {
-    public static StackSpawner Instance;
-    
     [Header("Elements")] 
     [SerializeField] private Transform _stackPosParent;
     [SerializeField] private Hexagon _hexagonPrefab;
@@ -20,34 +19,27 @@ public class StackSpawner : MonoBehaviour
 
     private int stackCounter;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        
         StackController.OnStackPlaced += StackPlacedCallback;
-        LevelCompleteUI.OnLevelComplete += ResetStacks;
-        LevelCompleteUI.OnLevelComplete += GenerateStacks;
 
-        GameplayUI.OnStackRegenerate += RegenerateStack;
+        PowerUpUI.OnStackRegenerate += RegenerateStack;
         MergeManager.OnLastStackPlaced += RegenerateStack;
     }
     
     private void Start()
     {
         GenerateStacks();
-        GameplayUI.OnStackCollapsed += DisableStackParent;
+        PowerUpUI.OnStackCollapsed += DisableStackParent;
     }
 
     private void OnDestroy()
     {
         StackController.OnStackPlaced -= StackPlacedCallback;
-        LevelCompleteUI.OnLevelComplete -= ResetStacks;
-        LevelCompleteUI.OnLevelComplete -= GenerateStacks;
         
-        GameplayUI.OnStackRegenerate -= RegenerateStack;
+        PowerUpUI.OnStackRegenerate -= RegenerateStack;
         MergeManager.OnLastStackPlaced -= RegenerateStack;
-        GameplayUI.OnStackCollapsed -= DisableStackParent;
+        PowerUpUI.OnStackCollapsed -= DisableStackParent;
     }
 
     private void DisableStackParent() => _stackPosParent.gameObject.SetActive(false);
@@ -64,7 +56,7 @@ public class StackSpawner : MonoBehaviour
         }
     }
 
-    private void ResetStacks()
+    public void ResetStacks()
     {
         for (int i = 0; i < _stackPosParent.childCount; i++)
         {
@@ -80,7 +72,7 @@ public class StackSpawner : MonoBehaviour
         GenerateStacks();
     }
 
-    private void GenerateStacks()
+    public void GenerateStacks()
     {
         for (int i = 0; i < _stackPosParent.childCount; i++)
         {

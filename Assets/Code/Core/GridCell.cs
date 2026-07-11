@@ -26,7 +26,16 @@ public class GridCell : MonoBehaviour
         }
     }
 
-    public void AssignStack(HexagonStack stack) => this.Stack = stack;
+    public void AssignStack(HexagonStack stack)
+    {
+        Stack = stack;
+
+        if (stack == null)
+            return;
+
+        stack.transform.SetParent(transform);
+        stack.transform.localPosition = Vector3.up * 0.2f;
+    }
 
     public void SetHexGridColor(Color color) =>
         transform.GetComponentInChildren<MeshRenderer>().material.color = color;

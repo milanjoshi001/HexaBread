@@ -36,7 +36,7 @@ public class StackController : MonoBehaviour
                     ManageClick(ctx);
                 }
                 
-                if(GameplayUI.Instance.IsStackDestroyerOn)
+                if(PowerUpUI.Instance.IsStackDestroyerOn)
                     ManageStackDestroyer(ctx);
             };
             
@@ -60,7 +60,7 @@ public class StackController : MonoBehaviour
 
     private void ManageStackDestroyer(InputAction.CallbackContext ctx)
     {
-        if(!GameplayUI.Instance.IsStackDestroyerOn) return;
+        if(!PowerUpUI.Instance.IsStackDestroyerOn) return;
         
         if(!ctx.action.WasPerformedThisFrame()) return;
 
@@ -75,14 +75,14 @@ public class StackController : MonoBehaviour
         
         GameplayUI.Instance.TotalHexagonsRemoved(stack.Hexagons.Count);
         stack.StackDestroy();
-        GameplayUI.Instance.SetDestroyer(false);
-        GameplayUI.Instance.ConfirmationPanelActivation(false);
+        PowerUpUI.Instance.SetDestroyer(false);
+        PowerUpUI.Instance.ConfirmationPanelActivation(false);
         StackSpawner.Instance.EnableStackParent();
     }
 
     private void ManageClick(InputAction.CallbackContext ctx)
     {
-        if(GameplayUI.Instance.IsStackDestroyerOn) return;
+        if(PowerUpUI.Instance.IsStackDestroyerOn) return;
         if(!ctx.action.WasPerformedThisFrame()) return;
         RaycastHit hit;
         Physics.Raycast(GetClickedRay(), out hit,500f, _hexagonLayerMask);
@@ -92,14 +92,14 @@ public class StackController : MonoBehaviour
         _prevCell = null;
         _currentStack = hit.collider.GetComponent<Hexagon>().HexStack;
         _currentStackInitialPos = _currentStack.transform.position;
-        if(_currentStack != null && GameplayUI.Instance.IsStackSwaperOn)
+        if(_currentStack != null && PowerUpUI.Instance.IsStackSwaperOn)
             _swapperCell = _currentStack.GetComponentInParent<GridCell>();
     }
 
 
     private void ManageDrag(InputAction.CallbackContext ctx)
     {
-        if(GameplayUI.Instance.IsStackDestroyerOn) return;
+        if(PowerUpUI.Instance.IsStackDestroyerOn) return;
         if(!ctx.action.WasPerformedThisFrame()) return;
 
         RaycastHit hit;
@@ -137,13 +137,60 @@ public class StackController : MonoBehaviour
     {
         GridCell gridCell = hit.collider.GetComponent<GridCell>();
         
+        if (PowerUpUI.Instance.IsStackSwaperOn)
+        {
+            if (!gridCell.IsOccupied)
+            {
+                DraggingAboveGround();
+                return;
+            }
+
+            HighlightGridCell(gridCell);
+            return;
+        }
+
         if(gridCell.IsOccupied)
             DraggingAboveGround();
         else
-            NonOccupiedGridCell(gridCell);
+            HighlightGridCell(gridCell);
+    }
+    
+    private void SwapStacks()
+    {
+        if (_swapperCell == null || _targetGridCell == null)
+            return;
+
+        if (_swapperCell == _targetGridCell)
+            return;
+
+        if (!_swapperCell.IsOccupied || !_targetGridCell.IsOccupied)
+            return;
+
+        HexagonStack first = _swapperCell.Stack;
+        HexagonStack second = _targetGridCell.Stack;
+
+        // Swap references
+        _swapperCell.AssignStack(second);
+        _targetGridCell.AssignStack(first);
+
+        first.Place();
+        second.Place();
+
+        OnStackPlaced?.Invoke(_swapperCell);
+        OnStackPlaced?.Invoke(_targetGridCell);
+
+        PowerUpUI.Instance.SetSwapper(false);
+        PowerUpUI.Instance.ConfirmationPanelActivation(false);
+
+        _swapperCell.SetHexGridColor(_resetGridCellColor);
+        _targetGridCell.SetHexGridColor(_resetGridCellColor);
+
+        _swapperCell = null;
+        _targetGridCell = null;
+        _currentStack = null;
     }
 
-    private void NonOccupiedGridCell(GridCell gridCell)
+    private void HighlightGridCell(GridCell gridCell)
     {
         Vector3 currentStackTargetPosition = gridCell.transform.position.With(y: 2);
 
@@ -159,11 +206,10 @@ public class StackController : MonoBehaviour
     {
         if(!ctx.action.WasPerformedThisFrame()) return;
 
-        if(GameplayUI.Instance.IsStackSwaperOn)
+        if (PowerUpUI.Instance.IsStackSwaperOn)
         {
-            _swapperCell?.AssignStack(null);
-            GameplayUI.Instance.ConfirmationPanelActivation(false);
-            GameplayUI.Instance.SetSwapper(false);
+            SwapStacks();
+            return;
         }
 
         if (_targetGridCell == null)
