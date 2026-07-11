@@ -1,17 +1,24 @@
 using System;
+using Code.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : MonoBehaviour
+public class MainMenuUI : Singleton<MainMenuUI>
 {
-    [Header("Elements")]
+    [Header("Elements")] 
+    [SerializeField] private Image _backgroundImage;
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private Button _playButton;
 
     private void Start()
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
+
+        if (_backgroundImage.TryGetComponent(out GradientColor gradientColor))
+        {
+            _backgroundImage.SetVerticesDirty();
+        }
     }
 
     private void OnEnable()

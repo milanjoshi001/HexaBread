@@ -1,18 +1,11 @@
+using Code.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverUI : MonoBehaviour
+public class GameOverUI : Singleton<GameOverUI>
 {
-    public static GameOverUI Instance;
-    
     [SerializeField] private Canvas _canvas;    
     [SerializeField] Button _restartButton;
-    
-    private void Awake()
-    {
-        if(Instance == null)
-            Instance = this;
-    }
     
     private void Start()
     {

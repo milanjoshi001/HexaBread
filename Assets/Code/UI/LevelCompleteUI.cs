@@ -1,22 +1,15 @@
 using System;
+using Code.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelCompleteUI : MonoBehaviour
+public class LevelCompleteUI : Singleton<LevelCompleteUI>
 {
-    public static LevelCompleteUI Instance;
-    
     [SerializeField] private Canvas _canvas;
     [SerializeField] Button _nextLevelButton;
     
-    public static Action OnLevelComplete;
+    public bool IsLevelCompleted { get; private set; }
     
-    private void Awake()
-    {
-        if(Instance == null)
-            Instance = this;
-    }
-
     private void Start()
     {
         _nextLevelButton.onClick.AddListener(NextLevel);
@@ -31,17 +24,22 @@ public class LevelCompleteUI : MonoBehaviour
 
     public void SetLevelComplete()
     {
+        IsLevelCompleted = true;
+        
+        LevelManager.Instance.NextLevelCounter();
         InputManager.Instance.gameObject.SetActive(false);
         GridManager.Instance.ResetGridList();
-        OnLevelComplete?.Invoke();
         SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
         _canvas.enabled = true;
     }
 
     private void NextLevel()
     {
-        InputManager.Instance.gameObject.SetActive(true);
+        IsLevelCompleted = false;
+        StackSpawner.Instance.ResetStacks();
+        StackSpawner.Instance.GenerateStacks();
         GameplayUI.Instance.NextLevelText();
+        InputManager.Instance.gameObject.SetActive(true);
         GridManager.Instance.LoadGrid(LevelManager.Instance.GetNextLevel().LevelGrid);
         _canvas.enabled = false;
     }
