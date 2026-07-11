@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
+using Code.Utils;
 using TMPro;
 using UnityEngine;
 
-public class LifeManager : MonoBehaviour
+public class LifeManager : Singleton<LifeManager>
 {
-    public static LifeManager Instance;
-    
     [SerializeField] TextMeshProUGUI _lifeText;
     [SerializeField] TextMeshProUGUI _remainingTimeText;
     
@@ -16,13 +15,7 @@ public class LifeManager : MonoBehaviour
     private float _remainingTime = 0;
     
     private int _lifeLeft;
-
-    private void Awake()
-    {
-        if(Instance == null)
-            Instance = this;
-    }
-
+    
     private void Start()
     {
         _lifeLeft = _totalLife;

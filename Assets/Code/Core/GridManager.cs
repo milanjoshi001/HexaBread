@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Code.Utils;
 using UnityEngine;
 
-public class GridManager : MonoBehaviour
+public class GridManager : Singleton<GridManager>
 {
-    public static GridManager Instance;
     public List<GridCell> GridCells => _gridCells;
     private List<GridCell> _gridCells = new List<GridCell>();
-    
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
 
     public void LoadGrid(GameObject gridObject)
     {

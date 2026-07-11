@@ -1,21 +1,14 @@
 using System;
+using Code.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
-    public static InputManager Instance;
-    
     public InputActionAsset InputAction => _inputAsset;
     
     [SerializeField] InputActionAsset _inputAsset;
-    
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
     
     private void OnEnable() => _inputAsset.Enable();
 

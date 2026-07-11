@@ -1,16 +1,9 @@
 using System;
+using Code.Utils;
 using UnityEngine;
 
-public class SaveLoadManager : MonoBehaviour
+public class SaveLoadManager : Singleton<SaveLoadManager>
 {
-    public static SaveLoadManager Instance;
-
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
-
     public void SaveGame(int level)
     {
         PlayerPrefs.SetInt("Level", level);
