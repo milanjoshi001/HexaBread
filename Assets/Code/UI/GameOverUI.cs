@@ -27,13 +27,14 @@ public class GameOverUI : Singleton<GameOverUI>
         LifeManager.Instance.LifeGone();
         InputManager.Instance.gameObject.SetActive(false);
         _canvas.enabled = true;
-        GridManager.Instance.ResetGridList();
+        ConveyorBelt.Instance.ResetConveyorBelt();
+        //GridManager.Instance.ResetGridList();
     }
 
     private void RestartGame()
     {
         InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
-        GridManager.Instance.LoadGrid(LevelManager.Instance.GetSameLevel().LevelGrid);
+        //GridManager.Instance.LoadGrid(LevelManager.Instance.GetSameLevel().LevelGrid);
     }
 }

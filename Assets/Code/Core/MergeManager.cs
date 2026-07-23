@@ -224,7 +224,7 @@ public class MergeManager : Singleton<MergeManager>
     
     private bool HasAnyPossibleMerge()
     {
-        foreach (var cell in GridManager.Instance.GridCells)
+        foreach (var cell in ConveyorBelt.Instance.GridCells)
         {
             if (!cell.IsOccupied)
                 return true;

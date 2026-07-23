@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9751010aa95b4794f9c782caba1c7c5f, type: 3}
   m_Name: Level01
   m_EditorClassIdentifier: 
-  _levelCompleteRequirement: 100
+  _levelCompleteRequirement: 20
   _levelGrid: {fileID: 5259748409633482034, guid: d6cdcb1aff89ff9459ed6c3c2ded076c, type: 3}

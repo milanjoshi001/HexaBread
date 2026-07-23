@@ -33,7 +33,7 @@ public class MainMenuUI : Singleton<MainMenuUI>
 
     private void PlayButtonCallback()
     {
-        GridManager.Instance.LoadGrid(LevelManager.Instance.LevelDataLibrary.LevelDataList[SaveLoadManager.Instance.LoadGame()].LevelGrid);
+        //GridManager.Instance.LoadGrid(LevelManager.Instance.LevelDataLibrary.LevelDataList[SaveLoadManager.Instance.LoadGame()].LevelGrid);
         GameplayUI.Instance.InitializeGame();
         gameObject.SetActive(false);
     }

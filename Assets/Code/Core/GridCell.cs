@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class GridCell : MonoBehaviour
 {
@@ -10,11 +11,25 @@ public class GridCell : MonoBehaviour
     [Header("Settings")] 
     [SerializeField] private List<Color> _heaxgonsColors;
     public HexagonStack Stack { get; private set; }
+
+    private SplineAnimate _splineAnimate;
     
     public bool IsOccupied
     {
         get => Stack != null;
         private set { }
+    }
+
+    public void LoadSplineAnimate()
+    {
+        if (_splineAnimate == null)
+        {
+            _splineAnimate = gameObject.AddComponent<SplineAnimate>();
+            _splineAnimate.Container = gameObject.GetComponentInParent<SplineContainer>();
+            _splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
+            _splineAnimate.MaxSpeed = 5f;
+            _splineAnimate.Play();
+        }
     }
 
     private void Start()

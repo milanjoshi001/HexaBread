@@ -104,6 +104,7 @@ public class StackController : MonoBehaviour
 
         RaycastHit hit;
         Physics.Raycast(GetClickedRay(), out hit,500f, _gridCellLayerMask);
+        ConveyorBelt.Instance.StopConveyorBelt();
 
         if (hit.collider == null)
             DraggingAboveGround();
@@ -128,7 +129,7 @@ public class StackController : MonoBehaviour
         _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
             currentStackTargetPosition, Time.deltaTime * 30);
 
-        GridManager.Instance.GridCells.ForEach(g => g.SetHexGridColor(_resetGridCellColor));
+        ConveyorBelt.Instance.GridCells.ForEach(g => g.SetHexGridColor(_resetGridCellColor));
 
         _targetGridCell = null;
     }
@@ -206,6 +207,7 @@ public class StackController : MonoBehaviour
     {
         if(!ctx.action.WasPerformedThisFrame()) return;
 
+        ConveyorBelt.Instance.StartConveyorBelt();
         if (PowerUpUI.Instance.IsStackSwaperOn)
         {
             SwapStacks();
@@ -226,6 +228,7 @@ public class StackController : MonoBehaviour
         _targetGridCell.AssignStack(_currentStack);
         OnStackPlaced?.Invoke(_targetGridCell);
         _targetGridCell.SetHexGridColor(_resetGridCellColor);
+        
         _targetGridCell = null;
         _currentStack = null;
     }
