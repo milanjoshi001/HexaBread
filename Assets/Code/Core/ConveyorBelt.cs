@@ -22,7 +22,7 @@ public class ConveyorBelt : Singleton<ConveyorBelt>
 
         for (int i = 0; i < _splineAnimates.Count; i++)
         {
-            _previousOffset += 0.04f;
+            _previousOffset += LevelManager.Instance.LevelDataLibrary.LevelDataList[LevelManager.Instance.CurrentLevel].HexagonOffset;
             _splineAnimates[i].StartOffset = _previousOffset;
         }
     }

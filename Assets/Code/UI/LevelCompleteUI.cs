@@ -29,7 +29,6 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         LevelManager.Instance.NextLevelCounter();
         InputManager.Instance.gameObject.SetActive(false);
         ConveyorBelt.Instance.ResetConveyorBelt();
-        //GridManager.Instance.ResetGridList();
         SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
         _canvas.enabled = true;
     }
@@ -41,7 +40,6 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         StackSpawner.Instance.GenerateStacks();
         GameplayUI.Instance.NextLevelText();
         InputManager.Instance.gameObject.SetActive(true);
-        //GridManager.Instance.LoadGrid(LevelManager.Instance.GetNextLevel().LevelGrid);
         _canvas.enabled = false;
     }
 }

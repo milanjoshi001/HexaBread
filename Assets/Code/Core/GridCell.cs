@@ -27,7 +27,7 @@ public class GridCell : MonoBehaviour
             _splineAnimate = gameObject.AddComponent<SplineAnimate>();
             _splineAnimate.Container = gameObject.GetComponentInParent<SplineContainer>();
             _splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
-            _splineAnimate.MaxSpeed = 5f;
+            _splineAnimate.MaxSpeed = LevelManager.Instance.LevelDataLibrary.LevelDataList[LevelManager.Instance.CurrentLevel].ConveyorBeltSpeed;
             _splineAnimate.Play();
         }
     }
