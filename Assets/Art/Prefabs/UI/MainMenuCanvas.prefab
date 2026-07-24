@@ -1053,6 +1053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4e18b3b7b3bd04ebb903585c7bcfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coinsText: {fileID: 6634105427595300006}
   _backgroundImage: {fileID: 5121183409531404456}
   _levelText: {fileID: 4565476341051660373}
   _playButton: {fileID: 5854570335495353495}

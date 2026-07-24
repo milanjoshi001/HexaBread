@@ -15,3 +15,4 @@ MonoBehaviour:
   <LevelCompleteRequirement>k__BackingField: 50
   <ConveyorBeltSpeed>k__BackingField: 5
   <HexagonOffset>k__BackingField: 0.04
+  <CoinsRewarded>k__BackingField: 300

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class MainMenuUI : Singleton<MainMenuUI>
 {
+    [Header("Top Elements")] 
+    [SerializeField] private TextMeshProUGUI _coinsText;
+    
     [Header("Elements")] 
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private TextMeshProUGUI _levelText;
@@ -15,10 +18,8 @@ public class MainMenuUI : Singleton<MainMenuUI>
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
 
-        if (_backgroundImage.TryGetComponent(out GradientColor gradientColor))
-        {
-            _backgroundImage.SetVerticesDirty();
-        }
+        _backgroundImage.SetVerticesDirty();
+        LoadCoins();
     }
 
     private void OnEnable()
@@ -30,6 +31,8 @@ public class MainMenuUI : Singleton<MainMenuUI>
     {
         _playButton.onClick.RemoveListener(PlayButtonCallback);
     }
+    
+    public void LoadCoins() => _coinsText.SetText($"{CoinsManager.Instance.Coins.TotalCoins}");
 
     private void PlayButtonCallback()
     {
@@ -37,4 +40,6 @@ public class MainMenuUI : Singleton<MainMenuUI>
         GameplayUI.Instance.InitializeGame();
         gameObject.SetActive(false);
     }
+
+    public void Activate(bool value) =>  gameObject.SetActive(value);
 }

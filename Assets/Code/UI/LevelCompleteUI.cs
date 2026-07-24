@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class LevelCompleteUI : Singleton<LevelCompleteUI>
 {
     [SerializeField] private Canvas _canvas;
-    [SerializeField] Button _nextLevelButton;
+    [SerializeField] private Button _nextLevelButton;
+    [SerializeField] private Button _homeButton;
     
     public bool IsLevelCompleted { get; private set; }
     
     private void Start()
     {
         _nextLevelButton.onClick.AddListener(NextLevel);
+        _homeButton.onClick.AddListener(Home);
         
         _canvas.enabled = false;
     }
@@ -20,6 +22,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
     private void OnDestroy()
     {
         _nextLevelButton.onClick.RemoveListener(NextLevel);
+        _homeButton.onClick.RemoveListener(Home);
     }
 
     public void SetLevelComplete()
@@ -41,5 +44,13 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         GameplayUI.Instance.NextLevelText();
         InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
+    }
+    
+    private void Home()
+    {
+        IsLevelCompleted = false;
+        StackSpawner.Instance.ResetStacks();
+        _canvas.enabled = false;
+        MainMenuUI.Instance.Activate(true);
     }
 }

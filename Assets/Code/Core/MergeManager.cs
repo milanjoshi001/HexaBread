@@ -217,7 +217,7 @@ public class MergeManager : Singleton<MergeManager>
         OnStackComplete?.Invoke(similarHexagonCount);
         _updatedGridCells.Add(gridCell);
         
-        yield return new WaitForSeconds(0.2f + (similarHexagonCount + 1) * 0.01f);
+        yield return new WaitForSeconds(0.1f + (similarHexagonCount + 1) * 0.01f);
         gridCell.Stack.SetTotalSimilarHexagons();
         OnHexStackPlaced?.Invoke();
     }

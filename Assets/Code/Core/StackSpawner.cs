@@ -29,7 +29,6 @@ public class StackSpawner : Singleton<StackSpawner>
     
     private void Start()
     {
-        GenerateStacks();
         PowerUpUI.OnStackCollapsed += DisableStackParent;
     }
 

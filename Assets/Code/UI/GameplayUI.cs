@@ -29,6 +29,7 @@ public class GameplayUI : Singleton<GameplayUI>
     
     public void InitializeGame()
     {
+        StackSpawner.Instance.GenerateStacks();
         _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
@@ -70,6 +71,9 @@ public class GameplayUI : Singleton<GameplayUI>
         if (_levelReq == 0)
         {
             LevelCompleteUI.Instance.SetLevelComplete();
+            CoinsManager.Instance.Coins.AddCoins(LevelManager.Instance.LevelDataLibrary
+                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded);
+            MainMenuUI.Instance.LoadCoins();
             _gridCompletedCounterText.gameObject.SetActive(false);
             return true;
         }
