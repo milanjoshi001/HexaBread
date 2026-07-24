@@ -30,16 +30,19 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         InputManager.Instance.gameObject.SetActive(false);
         ConveyorBelt.Instance.ResetConveyorBelt();
         SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
+        StarsManager.Instance.Stars.AddStars(1);
         _canvas.enabled = true;
     }
 
     private void NextLevel()
     {
         IsLevelCompleted = false;
-        StackSpawner.Instance.ResetStacks();
-        StackSpawner.Instance.GenerateStacks();
-        GameplayUI.Instance.NextLevelText();
-        InputManager.Instance.gameObject.SetActive(true);
+        //StackSpawner.Instance.ResetStacks();
+        //StackSpawner.Instance.GenerateStacks();
+        //GameplayUI.Instance.NextLevelText();
+        //InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
+        MainMenuUI.Instance.Activate(true);
+        MainMenuUI.Instance.RefreshStars();
     }
 }

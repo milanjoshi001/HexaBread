@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9751010aa95b4794f9c782caba1c7c5f, type: 3}
   m_Name: Level01
   m_EditorClassIdentifier: 
-  <LevelCompleteRequirement>k__BackingField: 50
+  <LevelCompleteRequirement>k__BackingField: 20
   <ConveyorBeltSpeed>k__BackingField: 5
   <HexagonOffset>k__BackingField: 0.04
