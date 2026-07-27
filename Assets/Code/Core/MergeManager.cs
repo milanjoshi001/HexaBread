@@ -15,6 +15,7 @@ public class MergeManager : Singleton<MergeManager>
     public static Action OnLastStackPlaced;
 
     private Coroutine _coroutine;
+    public int TotalUnoccupiedGridCells { get; private set; }
 
 
     protected override void Awake()
@@ -243,6 +244,9 @@ public class MergeManager : Singleton<MergeManager>
 
     private void CheckLevelFailed()
     {
+        TotalUnoccupiedGridCells = ConveyorBelt.Instance.GetUnoccupiedGridCells();
+        Debug.Log($"Game Complete with remaining grid cells {TotalUnoccupiedGridCells}");
+        
         if (LevelCompleteUI.Instance.IsLevelCompleted)
             return;
         
@@ -251,8 +255,9 @@ public class MergeManager : Singleton<MergeManager>
 
         if (HasAnyPossibleMerge())
             return;
+        
 
-        Debug.Log("GAME OVER");
+        Debug.Log($"Game Over / Game Complete with remaining grid cells {TotalUnoccupiedGridCells}");
         OnLastStackPlaced?.Invoke();
     }
 }

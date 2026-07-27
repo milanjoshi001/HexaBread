@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -36,6 +37,8 @@ public class ConveyorBelt : Singleton<ConveyorBelt>
     {
         _splineAnimates.ForEach(h => h.Pause());
     }
+
+    public int GetUnoccupiedGridCells() => _gridCells.Count(g => !g.IsOccupied);
 
     public void ResetConveyorBelt()
     {

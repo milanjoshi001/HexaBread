@@ -84,7 +84,7 @@ public class HexagonStack : MonoBehaviour
 
     public void SetTotalSimilarHexagons()
     {
-        if (Hexagons.Count < 1) return;
+        if (Hexagons.Count < 1 || GameplayUI.Instance.IsLevelComplete || LevelCompleteUI.Instance.IsLevelCompleted) return;
         Hexagons[^1].EnableText(true);
         Hexagons[^1].SetSimilarHexagonCount(TotalSimilarHexagons());
     }

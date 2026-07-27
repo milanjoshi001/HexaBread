@@ -72,7 +72,7 @@ public class GameplayUI : Singleton<GameplayUI>
         {
             LevelCompleteUI.Instance.SetLevelComplete();
             CoinsManager.Instance.Coins.AddCoins(LevelManager.Instance.LevelDataLibrary
-                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded);
+                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded + MergeManager.Instance.TotalUnoccupiedGridCells);
             MainMenuUI.Instance.LoadCoins();
             _gridCompletedCounterText.gameObject.SetActive(false);
             return true;
