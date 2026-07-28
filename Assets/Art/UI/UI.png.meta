@@ -250,8 +250,8 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 35, y: 12, z: 35, w: 12}
       customData: 
       outline: []
       physicsShape: []
@@ -259,6 +259,50 @@ TextureImporter:
       bones: []
       spriteID: 1997d3e1e366dbc42878c61a2f8d9d8a
       internalID: -1752893773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamond
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 256
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db8ea4e0c9e90da48913f20a96b92493
+      internalID: 1604374508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: regenerate
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fea7f239e55027542bde824c23743bc6
+      internalID: 2115052381
       vertices: []
       indices: 
       edges: []
@@ -282,8 +326,10 @@ TextureImporter:
       UI_0: -1752893773
       build: -1179468845
       coins: -1567455963
+      diamond: 1604374508
       heart: 75553058
       home: 572060328
+      regenerate: 2115052381
       settings: -1415497017
       shop: 158906133
   mipmapLimitGroupName: 
