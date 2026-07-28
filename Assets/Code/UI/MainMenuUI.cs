@@ -1,4 +1,3 @@
-using System;
 using Code.Utils;
 using TMPro;
 using UnityEngine;
@@ -7,9 +6,6 @@ using UnityEngine.UI;
 public class MainMenuUI : Singleton<MainMenuUI>
 {
     [SerializeField] private Image _backgroundImage;
-    
-    [Header("Top Elements")] 
-    [SerializeField] private TextMeshProUGUI _coinsText;
     
     [Header("Bottom Elements")] 
     [SerializeField] private Button _homeButton;
@@ -22,7 +18,6 @@ public class MainMenuUI : Singleton<MainMenuUI>
     [SerializeField] private GameObject _levelLableText;
     [SerializeField] private GameObject _levelPanel;
     
-    
     [Header("Elements")] 
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private Button _playButton;
@@ -33,20 +28,20 @@ public class MainMenuUI : Singleton<MainMenuUI>
 
     private void Start()
     {
+        HomeButtonCallback();
         _playButton.onClick.AddListener(PlayButtonCallback);
 
         _backgroundImage.SetVerticesDirty();
-        LoadCoins();
         
         _homeButton.onClick.AddListener(HomeButtonCallback);
         _shopButton.onClick.AddListener(ShopButtonCallback);
         _levelButton.onClick.AddListener(LevelButtonCallback);
-        HomeButtonCallback();
+        
     }
 
     private void OnEnable()
     {
-        _levelText.SetText($"{SaveLoadManager.Instance.LoadGame() + 1}");
+        _levelText.SetText($"Level {SaveLoadManager.Instance.LoadGame() + 1}");
     }
 
     private void OnDestroy()
@@ -76,8 +71,6 @@ public class MainMenuUI : Singleton<MainMenuUI>
 
     #endregion
     
-    public void LoadCoins() => _coinsText.SetText($"{CoinsManager.Instance.Coins.TotalCoins}");
-
     private void PlayButtonCallback()
     {
         //GridManager.Instance.LoadGrid(LevelManager.Instance.LevelDataLibrary.LevelDataList[SaveLoadManager.Instance.LoadGame()].LevelGrid);
