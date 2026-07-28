@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 918767a7015741e79f51a642a04993f6, type: 3}
+  m_Name: CafeLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::CafeShopsLibrary
+  <CafeShops>k__BackingField:
+  - {fileID: 11400000, guid: b90a317f99b547146bd034b19a9e1167, type: 2}
+  - {fileID: 11400000, guid: 52da78648450720418f20b3c91a80bf2, type: 2}
+  - {fileID: 11400000, guid: 703c2cae88246d242b23d029fe51d9f6, type: 2}
