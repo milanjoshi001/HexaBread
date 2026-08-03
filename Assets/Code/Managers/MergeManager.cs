@@ -17,6 +17,7 @@ public class MergeManager : Singleton<MergeManager>
     private Coroutine _coroutine;
     public int TotalUnoccupiedGridCells { get; private set; }
 
+    public int TotalHexagonCollected {get; private set; }
 
     protected override void Awake()
     {
@@ -207,6 +208,7 @@ public class MergeManager : Singleton<MergeManager>
 
         while (similarHexagons.Count > 0)
         {
+            TotalHexagonCollected += similarHexagons.Count;
             similarHexagons[0].SetParent(null);
             similarHexagons[0].Vanish(delay);
             delay += 0.005f;
