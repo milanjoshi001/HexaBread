@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d5447edaa94afa8e97a6fd652a4a77, type: 3}
   m_Name: CS_Name01
   m_EditorClassIdentifier: Assembly-CSharp::CafeShopData
-  <CafeName>k__BackingField: 
-  <CafeImage>k__BackingField: 
+  <CafeName>k__BackingField: Test Shop
+  <CafeImage>k__BackingField: {fileID: -851678419, guid: 1201c14bb4ee74d8e99e56dc4f3f4fd1, type: 3}
+  <CafePrefab>k__BackingField: {fileID: 5549526767623749851, guid: ec457e5601dd7ec47965e7f1364c268b, type: 3}

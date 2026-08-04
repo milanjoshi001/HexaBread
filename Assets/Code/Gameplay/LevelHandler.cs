@@ -6,11 +6,13 @@ public class LevelHandler : Singleton<LevelHandler>
 {
     [SerializeField] private Transform _hideGameplay;
 
-    private int _totalHexagons => MergeManager.Instance.TotalHexagonCollected;
+    public int TotalHexagons => MergeManager.Instance.TotalHexagonCollected;
 
     public void LoadLevel(GameObject gameObject)
     {
-        MainMenuUI.Instance. Activate(false);
+        MainMenuUI.Instance.Activate(false);
+        GameplayUI.Instance.Activate(false);
+        CafeShopUI.Instance.Activate(true);
         _hideGameplay.gameObject.SetActive(false);
 
         var levelObject = Instantiate(gameObject, transform);
@@ -20,6 +22,9 @@ public class LevelHandler : Singleton<LevelHandler>
 
     public void CloseLevel()
     {
+        MainMenuUI.Instance.Activate(true);
+        GameplayUI.Instance.Activate(true);
+        CafeShopUI.Instance.Activate(false);
         _hideGameplay.gameObject.SetActive(true);
     }
 }

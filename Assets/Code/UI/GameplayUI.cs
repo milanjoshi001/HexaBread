@@ -34,6 +34,8 @@ public class GameplayUI : Singleton<GameplayUI>
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
     }
+    
+    public void Activate(bool value) => gameObject.SetActive(value);
 
     private void CurrentLevelText()
     {

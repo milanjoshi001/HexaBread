@@ -206,9 +206,9 @@ public class MergeManager : Singleton<MergeManager>
         
         float delay = 0;
 
+        TotalHexagonCollected += similarHexagons.Count;
         while (similarHexagons.Count > 0)
         {
-            TotalHexagonCollected += similarHexagons.Count;
             similarHexagons[0].SetParent(null);
             similarHexagons[0].Vanish(delay);
             delay += 0.005f;

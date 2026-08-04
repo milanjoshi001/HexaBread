@@ -14,5 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CafeShopsLibrary
   <CafeShops>k__BackingField:
   - {fileID: 11400000, guid: b90a317f99b547146bd034b19a9e1167, type: 2}
-  - {fileID: 11400000, guid: 52da78648450720418f20b3c91a80bf2, type: 2}
-  - {fileID: 11400000, guid: 703c2cae88246d242b23d029fe51d9f6, type: 2}

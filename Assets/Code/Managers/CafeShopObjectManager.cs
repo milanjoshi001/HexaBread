@@ -8,6 +8,8 @@ public class CafeShopObjectManager : Singleton<CafeShopObjectManager>
 {
     [SerializeField] private List<ObjectFill> _objectFills;
 
+    private ObjectFill _objectFill;
+
     private void Start()
     {
         foreach (var objectFill in _objectFills)
@@ -28,10 +30,18 @@ public class CafeShopObjectManager : Singleton<CafeShopObjectManager>
         foreach (var objectFill in objectsFill)
         {
             if (objectFill.FillPercentage <= objectFill.MaxFillPercentage)
-                objectFill.Fill();
+            {
+                _objectFill = objectFill;
+            }
             else
                 LoadObject();
         }
+    }
+
+    public void ObjectFillingProcess()
+    {
+        if (_objectFill != null && _objectFill.FillPercentage <= _objectFill.MaxFillPercentage)
+            _objectFill.Fill();
     }
 
     private void LoadObject()

@@ -14,7 +14,8 @@ public class EnterShopButtonUI : MonoBehaviour
     {
         _levelNameText.SetText(levelName);
         _levelImage.sprite = levelSprite;
-        _shopButton.onClick.AddListener(() => callback?.Invoke());
+        if(TryGetComponent(out _shopButton))
+            _shopButton.onClick.AddListener(() => callback?.Invoke());
     }
     
 }
