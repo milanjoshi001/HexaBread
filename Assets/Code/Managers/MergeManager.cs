@@ -17,7 +17,7 @@ public class MergeManager : Singleton<MergeManager>
     private Coroutine _coroutine;
     public int TotalUnoccupiedGridCells { get; private set; }
 
-    public int TotalHexagonCollected {get; private set; }
+    public int TotalHexagonCollected { get; private set; } = 100;
 
     protected override void Awake()
     {
@@ -262,4 +262,6 @@ public class MergeManager : Singleton<MergeManager>
         Debug.Log($"Game Over / Game Complete with remaining grid cells {TotalUnoccupiedGridCells}");
         OnLastStackPlaced?.Invoke();
     }
+
+    public void RemoveHexagonFromCollected(int value) => TotalHexagonCollected -= value;
 }

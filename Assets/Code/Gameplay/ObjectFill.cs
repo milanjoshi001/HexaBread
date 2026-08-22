@@ -1,24 +1,18 @@
-using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
 public class ObjectFill : MonoBehaviour
 {
+    [SerializeField] private Renderer _renderer;
     [SerializeField] private float _fillProgressionAmount;
-    [SerializeField] private float _maxFillAmount;
+    [SerializeField] private float _maxFillPercentage;
+    [SerializeField] private int _maxPointsRequired = 30;
     [SerializeField] private Animator _animator;
     
-    public float FillPercentage => _fillPercentage;
-    public float MaxFillPercentage => _maxFillAmount;
+    public bool IsFull => _fillPercentage >= 1f;
     
     private float _fillPercentage;
-    private Renderer _renderer;
-
-    private void Awake()
-    {
-        _renderer = GetComponent<Renderer>();
-    }
-
+    private int _currentPoints;
+    
     private void Start()
     {
         UpdateMaterials();
@@ -26,20 +20,32 @@ public class ObjectFill : MonoBehaviour
 
     public void Fill()
     {
-        if (_fillPercentage >= 1) return;
+        if (MergeManager.Instance.TotalHexagonCollected <= 0)
+            return;
+        
+        if (_currentPoints >= _maxPointsRequired)
+            return;
 
-        _fillPercentage += _fillProgressionAmount;
+        _currentPoints++;
+
+        _fillPercentage = (float)_currentPoints / _maxPointsRequired;
 
         UpdateMaterials();
         
-        _animator.Play("Fill");
+        _animator.Play("FillBump");
+        MergeManager.Instance.RemoveHexagonFromCollected(1);
+        
+        if (_currentPoints >= _maxPointsRequired)
+        {
+            CafeShopObjectManager.Instance.CheckObjectFill();
+        }
     }
 
     private void UpdateMaterials()
     {
         foreach (var material in _renderer.materials)
         {
-            material.SetFloat("_FillAmount", _fillPercentage * _maxFillAmount);
+            material.SetFloat("_Fill_Percent", _fillPercentage * _maxFillPercentage);
         }
     }
 }

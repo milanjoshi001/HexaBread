@@ -20,6 +20,6 @@ public class CafeShopSelectionUI : Singleton<CafeShopSelectionUI>
 
     private void LoadLevel(CafeShopData  cafeShopData)
     {
-        LevelHandler.Instance.LoadLevel(cafeShopData.CafePrefab);
+        LevelHandler.Instance.LoadLevel(cafeShopData);
     }
 }

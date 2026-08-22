@@ -139,8 +139,6 @@ public class StackSpawner : Singleton<StackSpawner>
             return null;
         }
         
-        Color thirdColor = colorList.OrderBy(x=>Random.value).First();
-        
-        return new Color[] { firstColor, secondColor, thirdColor };
+        return new Color[] { firstColor, secondColor };
     }
 }

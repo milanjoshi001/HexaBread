@@ -48,7 +48,7 @@ public class LifeManager : Singleton<LifeManager>
         }
         else
         {
-            _remainingTimeText.SetText("");
+            _remainingTimeText.SetText("Full");
         }
     }
 

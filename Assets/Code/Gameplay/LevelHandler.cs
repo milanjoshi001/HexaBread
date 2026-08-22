@@ -6,16 +6,35 @@ public class LevelHandler : Singleton<LevelHandler>
 {
     [SerializeField] private Transform _hideGameplay;
 
+    private Camera _camera;
+    
     public int TotalHexagons => MergeManager.Instance.TotalHexagonCollected;
 
-    public void LoadLevel(GameObject gameObject)
+    private CafeShopObjectManager _cafeShopObjectManager;
+
+    private void Start()
+    {
+        _camera = Camera.main;
+    }
+
+    public void Activate(bool value) => _hideGameplay.gameObject.SetActive(value);
+
+    public void LoadLevel(CafeShopData  cafeShopData)
     {
         MainMenuUI.Instance.Activate(false);
         GameplayUI.Instance.Activate(false);
         CafeShopUI.Instance.Activate(true);
-        _hideGameplay.gameObject.SetActive(false);
+        CameraManager.Instance.ToggleProjection();
+        Activate(false);
+        if (_cafeShopObjectManager != null && _cafeShopObjectManager != cafeShopData.CafePrefab)
+        {
+            _cafeShopObjectManager.Activate(true);
+            return;
+        }
 
-        var levelObject = Instantiate(gameObject, transform);
+        _cafeShopObjectManager = null;
+        var levelObject = Instantiate(cafeShopData.CafePrefab, transform);
+        _cafeShopObjectManager = levelObject;
     }
 
     public int LevelProgression() => 0;
@@ -25,6 +44,8 @@ public class LevelHandler : Singleton<LevelHandler>
         MainMenuUI.Instance.Activate(true);
         GameplayUI.Instance.Activate(true);
         CafeShopUI.Instance.Activate(false);
-        _hideGameplay.gameObject.SetActive(true);
+        CameraManager.Instance.ToggleProjection();
+        _cafeShopObjectManager.Activate(false);
+        Activate(true);
     }
 }

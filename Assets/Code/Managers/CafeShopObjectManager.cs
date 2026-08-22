@@ -16,31 +16,30 @@ public class CafeShopObjectManager : Singleton<CafeShopObjectManager>
         {
             objectFill.gameObject.SetActive(false);
         }
-    }
-
-    private void OnEnable()
-    {
         CheckObjectFill();
     }
 
+    public void Activate(bool value) => gameObject.SetActive(value);
+
     public void CheckObjectFill()
     {
-        var objectsFill = _objectFills.Where(item => item.gameObject.activeSelf);
+        _objectFill = null;
 
-        foreach (var objectFill in objectsFill)
+        foreach (var objectFill in _objectFills)
         {
-            if (objectFill.FillPercentage <= objectFill.MaxFillPercentage)
+            if (objectFill.gameObject.activeSelf && !objectFill.IsFull)
             {
                 _objectFill = objectFill;
+                return;
             }
-            else
-                LoadObject();
         }
+
+        LoadObject();
     }
 
     public void ObjectFillingProcess()
     {
-        if (_objectFill != null && _objectFill.FillPercentage <= _objectFill.MaxFillPercentage)
+        if (_objectFill != null)
             _objectFill.Fill();
     }
 
@@ -51,8 +50,11 @@ public class CafeShopObjectManager : Singleton<CafeShopObjectManager>
             if (!objectFill.gameObject.activeSelf)
             {
                 objectFill.gameObject.SetActive(true);
-                break;
+                _objectFill = objectFill;
+                return;
             }
         }
+        
+        Debug.Log("Level Complete");
     }
 }
