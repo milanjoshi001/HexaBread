@@ -11,25 +11,11 @@ public class GridCell : MonoBehaviour
     [Header("Settings")] 
     [SerializeField] private List<Color> _heaxgonsColors;
     public HexagonStack Stack { get; private set; }
-
-    private SplineAnimate _splineAnimate;
     
     public bool IsOccupied
     {
         get => Stack != null;
         private set { }
-    }
-
-    public void LoadSplineAnimate()
-    {
-        if (_splineAnimate == null)
-        {
-            _splineAnimate = gameObject.AddComponent<SplineAnimate>();
-            _splineAnimate.Container = gameObject.GetComponentInParent<SplineContainer>();
-            _splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
-            _splineAnimate.MaxSpeed = LevelManager.Instance.LevelDataLibrary.LevelDataList[LevelManager.Instance.CurrentLevel].ConveyorBeltSpeed;
-            _splineAnimate.Play();
-        }
     }
 
     private void Start()
@@ -50,6 +36,7 @@ public class GridCell : MonoBehaviour
 
         stack.transform.SetParent(transform);
         stack.transform.localPosition = Vector3.up * 0.2f;
+        //stack.transform.localScale = Vector3.one;
     }
 
     public void SetHexGridColor(Color color) =>

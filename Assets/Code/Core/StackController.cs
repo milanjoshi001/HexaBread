@@ -104,8 +104,7 @@ public class StackController : MonoBehaviour
 
         RaycastHit hit;
         Physics.Raycast(GetClickedRay(), out hit,500f, _gridCellLayerMask);
-        ConveyorBelt.Instance.StopConveyorBelt();
-
+        
         if (hit.collider == null)
             DraggingAboveGround();
         else
@@ -207,7 +206,6 @@ public class StackController : MonoBehaviour
     {
         if(!ctx.action.WasPerformedThisFrame()) return;
 
-        ConveyorBelt.Instance.StartConveyorBelt();
         if (PowerUpUI.Instance.IsStackSwaperOn)
         {
             SwapStacks();
