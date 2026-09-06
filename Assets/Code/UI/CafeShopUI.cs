@@ -12,7 +12,7 @@ public class CafeShopUI : Singleton<CafeShopUI>
 
     private void Start()
     {
-        _totalHexagonText.SetText($"{LevelHandler.Instance.TotalHexagons}");
+        //_totalHexagonText.SetText($"{LevelHandler.Instance.TotalHexagons}");
         
         _backButton.onClick.AddListener(BackButton);
     }
@@ -35,7 +35,7 @@ public class CafeShopUI : Singleton<CafeShopUI>
         if (_isHolding)
         {
             CafeShopObjectManager.Instance.ObjectFillingProcess();
-            _totalHexagonText.SetText($"{LevelHandler.Instance.TotalHexagons}");
+            //_totalHexagonText.SetText($"{LevelHandler.Instance.TotalHexagons}");
         }
     }
 

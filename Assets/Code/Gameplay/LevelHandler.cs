@@ -8,7 +8,7 @@ public class LevelHandler : Singleton<LevelHandler>
 
     private Camera _camera;
     
-    public int TotalHexagons => MergeManager.Instance.TotalHexagonCollected;
+    //public int TotalHexagons => MergeManager.Instance.TotalHexagonCollected;
 
     private CafeShopObjectManager _cafeShopObjectManager;
 
@@ -17,7 +17,10 @@ public class LevelHandler : Singleton<LevelHandler>
         _camera = Camera.main;
     }
 
-    public void Activate(bool value) => _hideGameplay.gameObject.SetActive(value);
+    public void Activate(bool value)
+    {
+        //_hideGameplay.gameObject.SetActive(value);
+    }
 
     public void LoadLevel(CafeShopData  cafeShopData)
     {

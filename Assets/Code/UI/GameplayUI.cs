@@ -16,21 +16,21 @@ public class GameplayUI : Singleton<GameplayUI>
     
     private void Start()
     {
-        MergeManager.OnStackComplete += SetGridCompleteCounter;
+        //MergeManager.OnStackComplete += SetGridCompleteCounter;
         MergeManager.OnLastStackPlaced += CurrentLevelText;
     }
 
 
     private void OnDestroy()
     {
-        MergeManager.OnStackComplete -= SetGridCompleteCounter;
+        //MergeManager.OnStackComplete -= SetGridCompleteCounter;
         MergeManager.OnLastStackPlaced -= CurrentLevelText;
     }
     
     public void InitializeGame()
     {
         StackSpawner.Instance.GenerateStacks();
-        _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
+        _targetAmount = LevelManager.Instance.GetLevelData().LevelCompleteRequirement;
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
     }
@@ -39,14 +39,14 @@ public class GameplayUI : Singleton<GameplayUI>
 
     private void CurrentLevelText()
     {
-        _gridCompletedCounterText.SetText($"{LevelManager.Instance.GetSameLevel().LevelCompleteRequirement}");
+        _gridCompletedCounterText.SetText($"{LevelManager.Instance.GetLevelData().LevelCompleteRequirement}");
         _gridCompletedCounterText.gameObject.SetActive(true);
     }
     
     public void NextLevelText()
     {
         _targetAmount = 0;
-        _targetAmount = LevelManager.Instance.GetNextLevel().LevelCompleteRequirement;
+        _targetAmount = LevelManager.Instance.GetLevelData().LevelCompleteRequirement;
         _levelReq = _targetAmount;
         _gridCompletedCounterText.SetText($"{_levelReq}");
         _gridCompletedCounterText.gameObject.SetActive(true);
@@ -73,8 +73,8 @@ public class GameplayUI : Singleton<GameplayUI>
         if (_levelReq == 0)
         {
             LevelCompleteUI.Instance.SetLevelComplete();
-            CurrencyManager.Instance.GameCurrency.AddCoins(LevelManager.Instance.LevelDataLibrary
-                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded + MergeManager.Instance.TotalUnoccupiedGridCells);
+            /*CurrencyManager.Instance.GameCurrency.AddCoins(LevelManager.Instance.LevelDataLibrary
+                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded + MergeManager.Instance.TotalUnoccupiedGridCells);*/
             CurrencyUI.Instance.UpdateCoinsText();
             _gridCompletedCounterText.gameObject.SetActive(false);
             return true;

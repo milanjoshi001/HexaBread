@@ -31,7 +31,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         
         LevelManager.Instance.NextLevelCounter();
         InputManager.Instance.gameObject.SetActive(false);
-        ConveyorBelt.Instance.ResetConveyorBelt();
+        PlayGrid.Instance.ResetGrid();
         SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
         _canvas.enabled = true;
     }

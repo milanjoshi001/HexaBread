@@ -22,36 +22,20 @@ public class FoodItem : MonoBehaviour
     {
         LeanTween.cancel(gameObject);
 
-        float delay =
-            transform.GetSiblingIndex() * 0.01f;
+        float delay = transform.GetSiblingIndex() * 0.01f;
 
-        LeanTween.moveLocal(
-                gameObject,
-                targetLocalPos,
-                0.1f)
+        LeanTween.moveLocal(gameObject, targetLocalPos, 0.1f)
             .setEase(LeanTweenType.easeInOutSine)
             .setDelay(delay);
 
-        Vector3 direction =
-            (targetLocalPos -
-             transform.localPosition)
-            .With(y: 0)
-            .normalized;
+        Vector3 direction = (targetLocalPos - transform.localPosition).With(y: 0).normalized;
 
         if (direction.sqrMagnitude > 0.001f)
         {
-            Vector3 rotationAxis =
-                Vector3.Cross(
-                    Vector3.up,
-                    direction);
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, direction);
 
-            LeanTween.rotateAround(
-                    gameObject,
-                    rotationAxis,
-                    360f,
-                    0.05f)
-                .setEase(
-                    LeanTweenType.easeInOutSine)
+            LeanTween.rotateAround(gameObject, rotationAxis, 360f, 0.05f)
+                .setEase(LeanTweenType.easeInOutSine)
                 .setDelay(delay);
         }
     }
@@ -60,14 +44,10 @@ public class FoodItem : MonoBehaviour
     {
         LeanTween.cancel(gameObject);
 
-        LeanTween.scale(
-                gameObject,
-                Vector3.zero,
-                0.2f)
+        LeanTween.scale(gameObject, Vector3.zero, 0.2f)
             .setEase(LeanTweenType.easeInBack)
             .setDelay(delay)
-            .setOnComplete(
-                () => Destroy(gameObject));
+            .setOnComplete(() => Destroy(gameObject));
     }
 
     public enum FoodIdentity

@@ -4,232 +4,405 @@ using UnityEngine.InputSystem;
 
 public class StackController : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] LayerMask _hexagonLayerMask;
-    [SerializeField] LayerMask _gridCellLayerMask;
-    [SerializeField] LayerMask _groundCellLayerMask;
-    
+    [Header("Layers")]
+    [SerializeField] private LayerMask _foodLayerMask;
+    [SerializeField] private LayerMask _gridCellLayerMask;
+    [SerializeField] private LayerMask _groundCellLayerMask;
+
     [Header("Visuals")]
     [SerializeField] private Color _hoverColor;
     [SerializeField] private Color _resetGridCellColor;
-    
-    private HexagonStack _currentStack;
-    private Vector3 _currentStackInitialPos;
-    
-    [Header("Data")]
+
+    [Header("Position")]
+    [SerializeField] private float _dragHeight = 2f;
+    [SerializeField] private float _placedHeight = 0.2f;
+
+    private FoodItem _currentFood;
+
+    private Vector3 _currentFoodInitialPosition;
+
     private GridCell _targetGridCell;
-    private GridCell _prevCell;
+    private GridCell _previousCell;
     private GridCell _swapperCell;
 
-    [Header("Actions")] 
+    private InputAction _clickAction;
+    private InputAction _dragAction;
+    private InputAction _dropAction;
+    
+    public static Action<GridCell> OnFoodPlaced;
+    public static Action<GridCell, GridCell> OnFoodSwapped;
     public static Action<GridCell> OnStackPlaced;
 
     private void Start()
     {
-        if(InputManager.Instance.InputAction != null)
+        if (InputManager.Instance == null || InputManager.Instance.InputAction == null)
         {
-            InputManager.Instance.InputAction.FindAction("Clicked").performed += ctx =>
+            Debug.LogError("StackController: InputManager not initialized.");
+            return;
+        }
+
+        _clickAction = InputManager.Instance.InputAction.FindAction("Clicked");
+
+        _dragAction = InputManager.Instance.InputAction.FindAction("Drag");
+
+        _dropAction = InputManager.Instance.InputAction.FindAction("Drop");
+
+        if (_clickAction != null)
+            _clickAction.performed += OnClicked;
+
+        if (_dragAction != null)
+            _dragAction.performed += OnDragged;
+
+        if (_dropAction != null)
+            _dropAction.performed += OnDropped;
+    }
+
+    private void OnDestroy()
+    {
+        if (_clickAction != null)
+            _clickAction.performed -= OnClicked;
+
+        if (_dragAction != null)
+            _dragAction.performed -= OnDragged;
+
+        if (_dropAction != null)
+            _dropAction.performed -= OnDropped;
+    }
+    
+    private void OnClicked(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        if (IsDestroyerActive())
+        {
+            DestroyFood();
+            return;
+        }
+
+        if (_currentFood != null)
+            return;
+
+        PickUpFood();
+    }
+
+    private void PickUpFood()
+    {
+        RaycastHit hit;
+
+        if (!Physics.Raycast(GetPointerRay(), out hit, 500f, _foodLayerMask))
+            return;
+
+        FoodItem food = hit.collider.GetComponentInParent<FoodItem>();
+
+        if (food == null)
+            return;
+
+        _currentFood = food;
+
+        _currentFoodInitialPosition = food.transform.position;
+
+        _targetGridCell = null;
+        _previousCell = null;
+        
+        if (IsSwapperActive())
+        {
+            _swapperCell = food.GetComponentInParent<GridCell>();
+
+            if (_swapperCell == null)
             {
-                if (!InputManager.Instance.InputAction.FindAction("Drag").WasPerformedThisFrame() &&
-                    _currentStack == null)
-                {
-                    ManageClick(ctx);
-                }
-                
-                if(PowerUpUI.Instance.IsStackDestroyerOn)
-                    ManageStackDestroyer(ctx);
-            };
-            
-            InputManager.Instance.InputAction.FindAction("Drag").performed += ctx =>
-            {
-                if(_currentStack != null && !InputManager.Instance.InputAction.FindAction("Clicked").WasPerformedThisFrame())
-                {
-                    ManageDrag(ctx);
-                }
-            };
-            
-            InputManager.Instance.InputAction.FindAction("Drop").performed += ctx =>
-            {
-                if(_currentStack != null)
-                {
-                    ManageDrop(ctx);
-                }
-            };
+                _currentFood = null;
+                return;
+            }
+        }
+        else
+        {
+            _swapperCell = null;
+        }
+
+        food.transform.SetParent(null);
+
+        food.ActivateCollider(false);
+    }
+
+    private void OnDragged(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        if (_currentFood == null)
+            return;
+
+        if (IsDestroyerActive())
+            return;
+
+        DragFood();
+    }
+
+    private void DragFood()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(GetPointerRay(), out hit, 500f, _gridCellLayerMask))
+        {
+            DraggingAboveGridCell(hit);
+        }
+        else
+        {
+            DraggingAboveGround();
         }
     }
-
-    private void ManageStackDestroyer(InputAction.CallbackContext ctx)
-    {
-        if(!PowerUpUI.Instance.IsStackDestroyerOn) return;
-        
-        if(!ctx.action.WasPerformedThisFrame()) return;
-
-        RaycastHit hit;
-        Physics.Raycast(GetClickedRay(), out hit, 500f, _hexagonLayerMask);
-        
-        if(hit.collider == null) return;
-        
-        HexagonStack stack = hit.collider.gameObject.GetComponent<Hexagon>().GetComponentInParent<HexagonStack>();
-        if (stack == null)
-            return;
-        
-        GameplayUI.Instance.TotalHexagonsRemoved(stack.Hexagons.Count);
-        stack.StackDestroy();
-        PowerUpUI.Instance.SetDestroyer(false);
-        PowerUpUI.Instance.ConfirmationPanelActivation(false);
-        StackSpawner.Instance.EnableStackParent();
-    }
-
-    private void ManageClick(InputAction.CallbackContext ctx)
-    {
-        if(PowerUpUI.Instance.IsStackDestroyerOn) return;
-        if(!ctx.action.WasPerformedThisFrame()) return;
-        RaycastHit hit;
-        Physics.Raycast(GetClickedRay(), out hit,500f, _hexagonLayerMask);
-
-
-        if (hit.collider == null) return;
-        _prevCell = null;
-        _currentStack = hit.collider.GetComponent<Hexagon>().HexStack;
-        _currentStackInitialPos = _currentStack.transform.position;
-        if(_currentStack != null && PowerUpUI.Instance.IsStackSwaperOn)
-            _swapperCell = _currentStack.GetComponentInParent<GridCell>();
-    }
-
-
-    private void ManageDrag(InputAction.CallbackContext ctx)
-    {
-        if(PowerUpUI.Instance.IsStackDestroyerOn) return;
-        if(!ctx.action.WasPerformedThisFrame()) return;
-
-        RaycastHit hit;
-        Physics.Raycast(GetClickedRay(), out hit,500f, _gridCellLayerMask);
-        
-        if (hit.collider == null)
-            DraggingAboveGround();
-        else
-            DraggingAboveGridCell(hit);
-    }
-
 
     private void DraggingAboveGround()
     {
         RaycastHit hit;
-        Physics.Raycast(GetClickedRay(), out hit,500f, _groundCellLayerMask);
 
-        if (hit.collider == null)
-        {
-            Debug.LogError("No ground detected!");
+        if (!Physics.Raycast(GetPointerRay(), out hit, 500f, _groundCellLayerMask))
             return;
-        }
 
-        Vector3 currentStackTargetPosition = hit.point.With(y: 2);
+        Vector3 targetPosition = hit.point.With(y: _dragHeight);
 
-        _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
-            currentStackTargetPosition, Time.deltaTime * 30);
+        MoveFood(targetPosition);
 
-        ConveyorBelt.Instance.GridCells.ForEach(g => g.SetHexGridColor(_resetGridCellColor));
+        ResetGridHighlights();
 
         _targetGridCell = null;
     }
 
     private void DraggingAboveGridCell(RaycastHit hit)
     {
-        GridCell gridCell = hit.collider.GetComponent<GridCell>();
+        GridCell cell = hit.collider.GetComponent<GridCell>();
+
+        if (cell == null)
+            return;
         
-        if (PowerUpUI.Instance.IsStackSwaperOn)
+        if (IsSwapperActive())
         {
-            if (!gridCell.IsOccupied)
+            if (!cell.IsOccupied || cell == _swapperCell)
             {
                 DraggingAboveGround();
                 return;
             }
 
-            HighlightGridCell(gridCell);
+            HighlightGridCell(cell);
+            return;
+        }
+        
+        if (cell.IsOccupied)
+        {
+            DraggingAboveGround();
             return;
         }
 
-        if(gridCell.IsOccupied)
-            DraggingAboveGround();
-        else
-            HighlightGridCell(gridCell);
+        HighlightGridCell(cell);
+    }
+
+    private void HighlightGridCell(GridCell cell)
+    {
+        Vector3 targetPosition = cell.transform.position.With(y: _placedHeight);
+
+        MoveFood(targetPosition);
+
+        if (_previousCell != cell)
+        {
+            _previousCell?.SetHexGridColor(_resetGridCellColor);
+
+            cell.SetHexGridColor(_hoverColor);
+
+            _previousCell = cell;
+        }
+
+        _targetGridCell = cell;
+    }
+
+    private void MoveFood(Vector3 targetPosition)
+    {
+        if (_currentFood == null)
+            return;
+
+        _currentFood.transform.position = Vector3.MoveTowards(_currentFood.transform.position, targetPosition, Time.deltaTime * 30f);
     }
     
-    private void SwapStacks()
+    private void OnDropped(InputAction.CallbackContext context)
     {
-        if (_swapperCell == null || _targetGridCell == null)
+        if (!context.performed)
             return;
 
-        if (_swapperCell == _targetGridCell)
+        if (_currentFood == null)
             return;
 
-        if (!_swapperCell.IsOccupied || !_targetGridCell.IsOccupied)
-            return;
-
-        HexagonStack first = _swapperCell.Stack;
-        HexagonStack second = _targetGridCell.Stack;
-
-        // Swap references
-        _swapperCell.AssignStack(second);
-        _targetGridCell.AssignStack(first);
-
-        first.Place();
-        second.Place();
-
-        OnStackPlaced?.Invoke(_swapperCell);
-        OnStackPlaced?.Invoke(_targetGridCell);
-
-        PowerUpUI.Instance.SetSwapper(false);
-        PowerUpUI.Instance.ConfirmationPanelActivation(false);
-
-        _swapperCell.SetHexGridColor(_resetGridCellColor);
-        _targetGridCell.SetHexGridColor(_resetGridCellColor);
-
-        _swapperCell = null;
-        _targetGridCell = null;
-        _currentStack = null;
-    }
-
-    private void HighlightGridCell(GridCell gridCell)
-    {
-        Vector3 currentStackTargetPosition = gridCell.transform.position.With(y: 2);
-
-        _currentStack.transform.position = Vector3.MoveTowards(_currentStack.transform.position,
-            currentStackTargetPosition, Time.deltaTime * 30);
-        _prevCell?.SetHexGridColor(_resetGridCellColor);
-        gridCell.SetHexGridColor(_hoverColor);
-        _prevCell = gridCell;
-        _targetGridCell = gridCell;
-    }
-
-    private void ManageDrop(InputAction.CallbackContext ctx)
-    {
-        if(!ctx.action.WasPerformedThisFrame()) return;
-
-        if (PowerUpUI.Instance.IsStackSwaperOn)
+        if (IsSwapperActive())
         {
-            SwapStacks();
+            SwapFood();
             return;
         }
 
         if (_targetGridCell == null)
         {
-            _currentStack.transform.position = _currentStackInitialPos;
-            _currentStack = null;
+            ReturnFood();
+            ResetController();
             return;
         }
 
-        _currentStack.transform.position = _targetGridCell.transform.position.With(y: 0.2f);
-        _currentStack.transform.SetParent(_targetGridCell.transform);
-        _currentStack.Place();
-
-        _targetGridCell.AssignStack(_currentStack);
-        OnStackPlaced?.Invoke(_targetGridCell);
-        _targetGridCell.SetHexGridColor(_resetGridCellColor);
-        
-        _targetGridCell = null;
-        _currentStack = null;
+        PlaceFood();
     }
 
-    private Ray GetClickedRay() => Camera.main.ScreenPointToRay(InputManager.Instance.InputAction.FindAction("Drag").ReadValue<Vector2>());
+    private void PlaceFood()
+    {
+        GridCell cell = _targetGridCell;
+
+        _currentFood.transform.SetParent(cell.transform);
+        _currentFood.transform.localPosition = Vector3.up * _placedHeight;
+        _currentFood.transform.localRotation = Quaternion.identity;
+        _currentFood.ActivateCollider(false);
+        
+        cell.AssignFoodToGridCell(_currentFood);
+        cell.SetHexGridColor(_resetGridCellColor);
+        
+        OnFoodPlaced?.Invoke(cell);
+        OnStackPlaced?.Invoke(cell);
+
+        ResetController();
+    }
+    
+
+    private void SwapFood()
+    {
+        if (_swapperCell == null || _targetGridCell == null)
+        {
+            ReturnFood();
+            ResetController();
+            return;
+        }
+
+        FoodItem first = _swapperCell.FoodItem;
+        FoodItem second = _targetGridCell.FoodItem;
+
+        if (first == null || second == null)
+        {
+            ReturnFood();
+            ResetController();
+            return;
+        }
+
+        GridCell firstCell = _swapperCell;
+        GridCell secondCell = _targetGridCell;
+
+        firstCell.AssignFoodToGridCell(second);
+        secondCell.AssignFoodToGridCell(first);
+
+        first.transform.SetParent(secondCell.transform);
+        second.transform.SetParent(firstCell.transform);
+
+        first.transform.localPosition = Vector3.up * _placedHeight;
+        second.transform.localPosition = Vector3.up * _placedHeight;
+
+        first.transform.localRotation = Quaternion.identity;
+        second.transform.localRotation = Quaternion.identity;
+
+        first.ActivateCollider(false);
+        second.ActivateCollider(false);
+
+        OnFoodSwapped?.Invoke(firstCell, secondCell);
+
+        if (PowerUpUI.Instance != null)
+        {
+            PowerUpUI.Instance.SetSwapper(false);
+            PowerUpUI.Instance.ConfirmationPanelActivation(false);
+        }
+
+        ResetGridHighlights();
+
+        ResetController();
+    }
+    
+    private void DestroyFood()
+    {
+        RaycastHit hit;
+
+        if (!Physics.Raycast(GetPointerRay(), out hit, 500f, _foodLayerMask))
+            return;
+
+        FoodItem food = hit.collider.GetComponentInParent<FoodItem>();
+
+        if (food == null)
+            return;
+
+        GridCell cell = food.GetComponentInParent<GridCell>();
+
+        if (cell == null)
+            return;
+
+        food.ActivateCollider(false);
+        cell.ClearFood();
+        food.Vanish(1f);
+
+        if (PowerUpUI.Instance != null)
+        {
+            PowerUpUI.Instance.SetDestroyer(false);
+
+            PowerUpUI.Instance.ConfirmationPanelActivation(false);
+        }
+
+        if (StackSpawner.Instance != null)
+            StackSpawner.Instance.EnableStackParent();
+    }
+    
+    private void ReturnFood()
+    {
+        if (_currentFood == null)
+            return;
+
+        _currentFood.transform.SetParent(null);
+        _currentFood.transform.position = _currentFoodInitialPosition;
+        _currentFood.ActivateCollider(true);
+
+        ResetGridHighlights();
+    }
+    
+    private void ResetController()
+    {
+        _currentFood = null;
+        _targetGridCell = null;
+        _previousCell = null;
+        _swapperCell = null;
+    }
+
+    private void ResetGridHighlights()
+    {
+        if (PlayGrid.Instance == null)
+            return;
+
+        foreach (GridCell cell in PlayGrid.Instance.GridCells)
+        {
+            if (cell != null)
+                cell.SetHexGridColor(_resetGridCellColor);
+        }
+    }
+
+    private bool IsSwapperActive()
+    {
+        return PowerUpUI.Instance != null && PowerUpUI.Instance.IsStackSwaperOn;
+    }
+
+    private bool IsDestroyerActive()
+    {
+        return PowerUpUI.Instance != null && PowerUpUI.Instance.IsStackDestroyerOn;
+    }
+
+    private Ray GetPointerRay()
+    {
+        Camera camera = Camera.main;
+
+        if (camera == null)
+            return default;
+
+        Vector2 pointerPosition;
+        if (Pointer.current != null)
+            pointerPosition = Pointer.current.position.ReadValue();
+        else
+            pointerPosition = Vector2.zero;
+
+        return camera.ScreenPointToRay(pointerPosition);
+    }
 }

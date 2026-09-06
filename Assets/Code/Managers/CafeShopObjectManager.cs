@@ -39,8 +39,8 @@ public class CafeShopObjectManager : Singleton<CafeShopObjectManager>
 
     public void ObjectFillingProcess()
     {
-        if (_objectFill != null)
-            _objectFill.Fill();
+        /*if (_objectFill != null)
+            _objectFill.Fill();*/
     }
 
     private void LoadObject()

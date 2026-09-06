@@ -1,68 +1,57 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Splines;
 
 public class GridCell : MonoBehaviour
 {
-    [Header("Elements")]
-    [SerializeField] Hexagon _hexagonPrefab;
-
-    [Header("Settings")] 
-    [SerializeField] private List<Color> _heaxgonsColors;
-    public HexagonStack Stack { get; private set; }
     
-    public bool IsOccupied
+    [Header("Visuals")]
+    [SerializeField] private MeshRenderer _gridRenderer;
+
+    [Header("Food Placement")]
+    [SerializeField] private float _foodHeight = 0.2f;
+
+    private FoodItem _foodItem;
+    public FoodItem FoodItem => _foodItem;
+
+    public bool IsOccupied => FoodItem != null;
+    
+    public void AssignFoodToGridCell(FoodItem food)
     {
-        get => Stack != null;
-        private set { }
+        if (food == null)
+            return;
+        
+        food.transform.SetParent(transform);
+        food.transform.localPosition =
+            Vector3.up * _foodHeight;
+        
+        _foodItem = food;
     }
 
-    private void Start()
+    public void ClearFood() => _foodItem = null;
+    
+    public void SetHexGridColor(Color color)
     {
-        if (transform.childCount > 1)
-        {
-            Stack = transform.GetChild(1).GetComponent<HexagonStack>();
-            Stack.Initialize();
-        }
-    }
+        if (_gridRenderer == null)
+            _gridRenderer =
+                GetComponentInChildren<MeshRenderer>();
 
-    public void AssignStack(HexagonStack stack)
-    {
-        Stack = stack;
-
-        if (stack == null)
+        if (_gridRenderer == null)
             return;
 
-        stack.transform.SetParent(transform);
-        stack.transform.localPosition = Vector3.up * 0.2f;
-        //stack.transform.localScale = Vector3.one;
+        _gridRenderer.material.color = color;
     }
 
-    public void SetHexGridColor(Color color) =>
-        transform.GetComponentInChildren<MeshRenderer>().material.color = color;
-
-    private void GenerateInitialHexagons()
+    
+    public void ResetFoodPosition()
     {
-        while (transform.childCount > 1)
-        {
-            Transform t = transform.GetChild(1);
-            t.SetParent(null);
-            DestroyImmediate(t.gameObject);
-        }
-        Stack = new GameObject("Initial Stack").AddComponent<HexagonStack>();
-        Stack.transform.SetParent(transform);
-        
-        Stack.transform.localPosition = Vector3.up * 0.2f;
+        if (_foodItem == null)
+            return;
 
-        for (int i = 0; i < _heaxgonsColors.Count; i++)
-        {
-            Vector3 spawnPos = Stack.transform.TransformPoint(Vector3.up * i * 0.2f);
-            
-            Hexagon hexagonInstance = Instantiate(_hexagonPrefab, spawnPos, Quaternion.identity);
-            
-            hexagonInstance.Color = _heaxgonsColors[i];
-            Stack.AddHexagon(hexagonInstance);
-        }
+        _foodItem.transform.SetParent(transform);
+
+        _foodItem.transform.localPosition =
+            Vector3.up * _foodHeight;
+
+        _foodItem.transform.localRotation =
+            Quaternion.identity;
     }
 }

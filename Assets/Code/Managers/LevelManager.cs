@@ -18,11 +18,7 @@ public class LevelManager : Singleton<LevelManager>
     }
 
     public void NextLevelCounter() => _currentLevelIndex++;
-
-
-    public LevelData GetNextLevel() => _levelDataLibrary.LevelDataList[_currentLevelIndex];
-
-    public LevelData GetSameLevel() =>
-        _levelDataLibrary.LevelDataList[_currentLevelIndex];
+    
+    public LevelData GetLevelData() => _levelDataLibrary.LevelDataList[_currentLevelIndex];
 
 }

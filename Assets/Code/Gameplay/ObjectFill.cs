@@ -18,7 +18,7 @@ public class ObjectFill : MonoBehaviour
         UpdateMaterials();
     }
 
-    public void Fill()
+    /*public void Fill()
     {
         if (MergeManager.Instance.TotalHexagonCollected <= 0)
             return;
@@ -39,7 +39,7 @@ public class ObjectFill : MonoBehaviour
         {
             CafeShopObjectManager.Instance.CheckObjectFill();
         }
-    }
+    }*/
 
     private void UpdateMaterials()
     {
