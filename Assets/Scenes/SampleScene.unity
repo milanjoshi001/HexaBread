@@ -228,7 +228,6 @@ Transform:
   - {fileID: 1773615970}
   - {fileID: 1795742943}
   - {fileID: 541008708}
-  - {fileID: 2068516020}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &86811503
@@ -1411,7 +1410,7 @@ Camera:
   field of view: 38.8
   orthographic: 0
   orthographic size: 11
-  m_Depth: -1
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1464,11 +1463,11 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 0
+  m_StopNaN: 1
+  m_Dithering: 1
   m_ClearDepth: 1
   m_AllowXRRendering: 1
   m_AllowHDROutput: 1
@@ -2843,50 +2842,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 426191820230380489, guid: dc60adcd4f21cd448ae5c495c0e519d7, type: 3}
   m_PrefabInstance: {fileID: 2035957070}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2068516019
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2068516020}
-  - component: {fileID: 2068516021}
-  m_Layer: 0
-  m_Name: MobileOrientation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2068516020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068516019}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 37335380}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2068516021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068516019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6818426d8578a55458717215bf746233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MobileOrientation
 --- !u!224 &2099493163 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8871458151430743515, guid: 5e53d1c5c64362746870042201c5d81e, type: 3}
