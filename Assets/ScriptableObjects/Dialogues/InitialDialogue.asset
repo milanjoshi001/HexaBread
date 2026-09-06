@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfee029bffe8fc2479ff9c3c257982f2, type: 3}
+  m_Name: InitialDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  <DialogueContentDatas>k__BackingField:
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Welcome to Hexa Bread! Before we can serve our
+      first customer, there\u2019s a little work to do."
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "The caf\xE9 is empty right now, so let\u2019s
+      start by filling our inventory with some basic ingredients."
+    <DialoguePosition>k__BackingField: 1
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Bread, flour, cheese, vegetables\u2026 we\u2019ll
+      need plenty of supplies to keep the kitchen running."
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Once the shelves are stocked, we should make
+      sure the caf\xE9 itself is ready for customers."
+    <DialoguePosition>k__BackingField: 1
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Let\u2019s purchase a few tables and chairs.
+      Nobody wants to enjoy their meal standing up!"
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "We\u2019ll also need some essential appliances
+      for the kitchen."
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "A good oven should be our first priority. Without
+      it, there won\u2019t be much baking happening around here."
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: After that, we can add a few more appliances to
+      help us prepare different kinds of food.
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Now that we have the basics covered, let\u2019s
+      organize everything properly."
+    <DialoguePosition>k__BackingField: 1
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: Keep an eye on our inventory. Running out of ingredients
+      in the middle of a busy day is the last thing we want.
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: Once everything is ready, we can open the doors
+      and welcome our first customers.
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Don't worry if things get messy at first. We'll
+      improve the caf\xE9 step by step."
+    <DialoguePosition>k__BackingField: 0
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: Complete today's setup, and we'll be ready to
+      start serving!
+    <DialoguePosition>k__BackingField: 1
+  - <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 39e6f403a44d366499a223a8983cbe92, type: 3}
+    <CharacterName>k__BackingField: Manager
+    <DialogueLine>k__BackingField: "Alright, boss. Let's turn this empty little shop
+      into a caf\xE9 people will love."
+    <DialoguePosition>k__BackingField: 1
