@@ -158,5 +158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba17b50c8b1b3047ae2feea4a45e460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hexagonPrefab: {fileID: 0}
-  _heaxgonsColors: []
+  _foodItem: {fileID: 0}
+  _gridRenderer: {fileID: 4146113896820480294}
+  _foodHeight: 0.2
