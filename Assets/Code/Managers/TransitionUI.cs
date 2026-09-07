@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Code.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TransitionUI : Singleton<TransitionUI>
@@ -18,27 +19,28 @@ public class TransitionUI : Singleton<TransitionUI>
         TryGetComponent(out _blockerImage);
     }
 
-    public void StartTransition()
+    public void StartTransition(UnityAction callback)
     {
         _blockerImage.enabled = true;
         if(_transitionCoroutine != null)
             StopTransition();
         
-        _transitionCoroutine = StartCoroutine(TransitionCoroutine());
+        _transitionCoroutine = StartCoroutine(TransitionCoroutine(callback));
     }
 
-    private IEnumerator TransitionCoroutine()
+    private IEnumerator TransitionCoroutine(UnityAction callback)
     {
-        LeanTween.scaleY(_topPanel.gameObject, 1f, 1f);
-        LeanTween.scaleY(_bottomPanel.gameObject, 1f, 1f);
-        yield return new WaitForSeconds(5f);
+        LeanTween.scaleY(_topPanel.gameObject, 1f, 0.2f);
+        LeanTween.scaleY(_bottomPanel.gameObject, 1f, 0.2f);
+        yield return new WaitForSeconds(1f);
+        callback?.Invoke();
         StopTransition();
     }
 
     private void StopTransition()
     {
-        LeanTween.scaleY(_topPanel.gameObject, 0f, 1f).setOnComplete(() => _blockerImage.enabled = false);
-        LeanTween.scaleY(_bottomPanel.gameObject, 0f, 1f).setOnComplete(() => _blockerImage.enabled = false);
+        LeanTween.scaleY(_topPanel.gameObject, 0f, 0.2f).setOnComplete(() => _blockerImage.enabled = false);
+        LeanTween.scaleY(_bottomPanel.gameObject, 0f, 0.2f).setOnComplete(() => _blockerImage.enabled = false);
         
         _transitionCoroutine = null;
     }

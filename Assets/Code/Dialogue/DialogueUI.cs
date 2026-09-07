@@ -42,7 +42,6 @@ public class DialogueUI : Singleton<DialogueUI>
         _currentDialogueContent = _dialogueContentDatas[0];
         LoadDialogueData(_currentDialogueContent);
         MainMenuUI.Instance.Activate(false);
-        GameplayUI.Instance.Activate(false);
     }
 
     public void CloseDialogue()
@@ -51,7 +50,6 @@ public class DialogueUI : Singleton<DialogueUI>
         _currentDialogueContent = null;
         _dialoguePanelRoot.SetActive(false);
         MainMenuUI.Instance.Activate(true);
-        GameplayUI.Instance.Activate(true);
     }
 
     private void SkipButton()

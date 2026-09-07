@@ -32,8 +32,11 @@ public class MainMenuUI : Singleton<MainMenuUI>
     
     private void PlayButtonCallback()
     {
-        GameplayUI.Instance.InitializeGame();
-        gameObject.SetActive(false);
+        TransitionUI.Instance.StartTransition(() =>
+        {
+            GameplayUI.Instance.InitializeGame();
+            gameObject.SetActive(false);
+        });
     }
 
     public void Activate(bool value) =>  gameObject.SetActive(value);

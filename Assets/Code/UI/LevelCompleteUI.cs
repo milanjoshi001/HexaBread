@@ -53,6 +53,8 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         IsLevelCompleted = false;
         StackSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
+        PlayGrid.Instance.Activate(false);
+        GameplayUI.Instance.Activate(false);
         MainMenuUI.Instance.Activate(true);
     }
 }

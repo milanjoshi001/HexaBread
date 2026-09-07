@@ -6,6 +6,8 @@ public class PlayGrid : Singleton<PlayGrid>
 {
     public List<GridCell> GridCells => _gridCells;
     [SerializeField] private List<GridCell> _gridCells = new List<GridCell>();
+    
+    public void Activate(bool value) => gameObject.SetActive(value);
 
     public void ResetGrid()
     {

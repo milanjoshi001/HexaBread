@@ -27,7 +27,6 @@ public class LevelHandler : Singleton<LevelHandler>
         MainMenuUI.Instance.Activate(false);
         GameplayUI.Instance.Activate(false);
         CafeShopUI.Instance.Activate(true);
-        CameraManager.Instance.ToggleProjection();
         Activate(false);
         if (_cafeShopObjectManager != null && _cafeShopObjectManager != cafeShopData.CafePrefab)
         {
@@ -47,7 +46,6 @@ public class LevelHandler : Singleton<LevelHandler>
         MainMenuUI.Instance.Activate(true);
         GameplayUI.Instance.Activate(true);
         CafeShopUI.Instance.Activate(false);
-        CameraManager.Instance.ToggleProjection();
         _cafeShopObjectManager.Activate(false);
         Activate(true);
     }
