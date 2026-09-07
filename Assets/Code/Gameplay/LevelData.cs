@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelData : ScriptableObject
 {
     [field: SerializeField] public List<CollectionObjective> CollectionObjectives{ get; private set; }
-    [field: SerializeField] public int LevelCompleteRequirement { get; private set; }
+    [field: SerializeField] public int MaxMoves { get; private set; }
     [field: SerializeField] public int CoinsRewarded { get; private set; }
 }
 

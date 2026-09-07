@@ -6,80 +6,48 @@ using UnityEngine.UI;
 
 public class GameplayUI : Singleton<GameplayUI>
 {
-    [Header("Elements")]
-    [SerializeField] private TextMeshProUGUI _gridCompletedCounterText;
-    [SerializeField] private Image _fillImage;
 
-    public bool IsLevelComplete => _levelReq == 0;
-    private int _targetAmount;
-    private int _levelReq = 0;
+    [Header("Elements")] 
+    [SerializeField] private TextMeshProUGUI _movesLeftText;
+    [SerializeField] private GameObject _objectivePrefab;
+    [SerializeField] private TextMeshProUGUI _levelText;
+
+    private int _maxMoves;
+    private LevelData _currentLevelData => LevelManager.Instance.GetLevelData();
     
     private void Start()
     {
-        //MergeManager.OnStackComplete += SetGridCompleteCounter;
         MergeManager.OnLastStackPlaced += CurrentLevelText;
+        MergeManager.OnMoveChanged += UpdateRemainingMovesText;
     }
-
 
     private void OnDestroy()
     {
-        //MergeManager.OnStackComplete -= SetGridCompleteCounter;
         MergeManager.OnLastStackPlaced -= CurrentLevelText;
+        MergeManager.OnMoveChanged -= UpdateRemainingMovesText;
     }
     
     public void InitializeGame()
     {
         StackSpawner.Instance.GenerateStacks();
-        _targetAmount = LevelManager.Instance.GetLevelData().LevelCompleteRequirement;
-        _levelReq = _targetAmount;
-        _gridCompletedCounterText.SetText($"{_levelReq}");
+        MergeManager.Instance.InitializeLevel(_currentLevelData.MaxMoves);
+        //TODO: refactor level requirements, currently it's taking 1 amount
+        _maxMoves = _currentLevelData.MaxMoves;
+        _movesLeftText.SetText($"{_maxMoves}");
+        _levelText.SetText($"{LevelManager.Instance.CurrentLevel + 1}");
     }
+
+    private void UpdateRemainingMovesText(int move) => _movesLeftText.SetText($"{move}");
     
     public void Activate(bool value) => gameObject.SetActive(value);
 
     private void CurrentLevelText()
     {
-        _gridCompletedCounterText.SetText($"{LevelManager.Instance.GetLevelData().LevelCompleteRequirement}");
-        _gridCompletedCounterText.gameObject.SetActive(true);
+        //TODO: if grid filled or moves are out reset the level
     }
     
     public void NextLevelText()
     {
-        _targetAmount = 0;
-        _targetAmount = LevelManager.Instance.GetLevelData().LevelCompleteRequirement;
-        _levelReq = _targetAmount;
-        _gridCompletedCounterText.SetText($"{_levelReq}");
-        _gridCompletedCounterText.gameObject.SetActive(true);
-        _fillImage.fillAmount = 0;
-    }
-
-    public void TotalHexagonsRemoved(int count)
-    {
-        UpdateProgress(count);
-    }
-    
-    public void SetGridCompleteCounter(int counter)
-    {
-        UpdateProgress(counter);
-    }
-    
-    private bool UpdateProgress(int removed)
-    {
-        _levelReq = Mathf.Max(_levelReq - removed, 0);
-
-        _fillImage.fillAmount = (_targetAmount - _levelReq) / (float)_targetAmount;
-        _gridCompletedCounterText.SetText($"{_levelReq}");
-
-        if (_levelReq == 0)
-        {
-            LevelCompleteUI.Instance.SetLevelComplete();
-            /*CurrencyManager.Instance.GameCurrency.AddCoins(LevelManager.Instance.LevelDataLibrary
-                .LevelDataList[LevelManager.Instance.CurrentLevel].CoinsRewarded + MergeManager.Instance.TotalUnoccupiedGridCells);*/
-            CurrencyUI.Instance.UpdateCoinsText();
-            _gridCompletedCounterText.gameObject.SetActive(false);
-            return true;
-        }
-
-        return false;
+        //TODO: back to home
     }
 }

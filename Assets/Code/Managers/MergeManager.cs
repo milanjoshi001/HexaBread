@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class MergeManager : Singleton<MergeManager>
 {
-    [Header("Level")]
-    [SerializeField] private int _maxMoves = 50;
 
 
     [Header("Neighbour Detection")]
@@ -22,7 +20,7 @@ public class MergeManager : Singleton<MergeManager>
     public static Action OnLevelComplete;
     public static Action OnGameOver;
     public static Action OnLastStackPlaced;
-    public int MovesRemaining { get; private set; }
+    private int _movesRemaining;
     public bool IsLevelCompleted { get; private set; }
     public bool IsGameOver { get; private set; }
 
@@ -30,8 +28,6 @@ public class MergeManager : Singleton<MergeManager>
 
     protected override void Awake()
     {
-        MovesRemaining = _maxMoves;
-
         ResetObjectives();
 
         StackController.OnFoodPlaced += FoodPlaced;
@@ -46,16 +42,14 @@ public class MergeManager : Singleton<MergeManager>
     
     public void InitializeLevel(int maxMoves)
     {
-        _maxMoves = maxMoves;
-
-        MovesRemaining = Mathf.Max(0, maxMoves);
+        _movesRemaining = Mathf.Max(0, maxMoves);
         
         ResetObjectives();
 
         IsLevelCompleted = false;
         IsGameOver = false;
 
-        OnMoveChanged?.Invoke(MovesRemaining);
+        OnMoveChanged?.Invoke(_movesRemaining);
     }
 
     private void ResetObjectives()
@@ -271,12 +265,12 @@ public class MergeManager : Singleton<MergeManager>
     
     private void ConsumeMove()
     {
-        if (MovesRemaining <= 0)
+        if (_movesRemaining <= 0)
             return;
 
-        MovesRemaining--;
+        _movesRemaining--;
         
-        OnMoveChanged?.Invoke(MovesRemaining);
+        OnMoveChanged?.Invoke(_movesRemaining);
     }
     
     private void CheckGameState()
@@ -290,7 +284,7 @@ public class MergeManager : Singleton<MergeManager>
             return;
         }
 
-        if (MovesRemaining <= 0)
+        if (_movesRemaining <= 0)
             GameOver();
     }
 

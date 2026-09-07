@@ -15,6 +15,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
     {
         _nextLevelButton.onClick.AddListener(NextLevel);
         _homeButton.onClick.AddListener(Home);
+        MergeManager.OnLevelComplete += SetLevelComplete;
         
         _canvas.enabled = false;
     }
@@ -23,6 +24,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
     {
         _nextLevelButton.onClick.RemoveListener(NextLevel);
         _homeButton.onClick.RemoveListener(Home);
+        MergeManager.OnLevelComplete -= SetLevelComplete;
     }
 
     public void SetLevelComplete()
