@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CollectionObjectives>k__BackingField:
   - FoodIdentity: 0
-    ItemsRequired: 10
+    RequiredAmount: 2
+    CollectedAmount: 0
   - FoodIdentity: 2
-    ItemsRequired: 5
-  <LevelCompleteRequirement>k__BackingField: 10
+    RequiredAmount: 2
+    CollectedAmount: 0
+  <MaxMoves>k__BackingField: 20
   <CoinsRewarded>k__BackingField: 200
