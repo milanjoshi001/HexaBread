@@ -10,11 +10,6 @@ public class MainMenuUI : Singleton<MainMenuUI>
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private Button _playButton;
     
-    private Button _currentButton;
-    private GameObject _currentPanel;
-    private TextMeshProUGUI _currentText;
-    private Image _currentIcon;
-
     private void Start()
     {
         _playButton.onClick.AddListener(PlayButtonCallback);
@@ -36,6 +31,7 @@ public class MainMenuUI : Singleton<MainMenuUI>
         {
             GameplayUI.Instance.InitializeGame();
             gameObject.SetActive(false);
+            GameState.Instance.SetState(GameStateType.Gameplay);
         });
     }
 

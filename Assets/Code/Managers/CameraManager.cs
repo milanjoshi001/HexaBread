@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Camera))]
 public class CameraManager : Singleton<CameraManager>
 {
+    [Header("Gameplay Camera Settings")] 
+    [SerializeField] private Vector3 _cameraPosition;
+    [Header("Cafe Camera Settings")]
     [SerializeField] private float _panSpeed;
 
     private Vector2 _lastPointerPosition;
@@ -13,8 +16,14 @@ public class CameraManager : Singleton<CameraManager>
 
     private void Update()
     {
-        HandleMouse();
-        HandleTouch();
+        if (GameState.Instance.CurrentGameState == GameStateType.Gameplay)
+            GameplayCamera();
+        
+        if (GameState.Instance.CurrentGameState == GameStateType.Cafe)
+        {
+            HandleMouse();
+            HandleTouch();
+        }
     }
 
     private void HandleMouse()
@@ -24,28 +33,21 @@ public class CameraManager : Singleton<CameraManager>
 
         Vector2 currentPosition = Mouse.current.position.ReadValue();
 
-        // Mouse pressed
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             _isDragging = true;
             _lastPointerPosition = currentPosition;
         }
 
-        // Mouse held + dragged
         if (Mouse.current.leftButton.isPressed && _isDragging)
         {
             Vector2 delta = currentPosition - _lastPointerPosition;
-
             PanCamera(delta);
-
             _lastPointerPosition = currentPosition;
         }
 
-        // Mouse released
         if (Mouse.current.leftButton.wasReleasedThisFrame)
-        {
             _isDragging = false;
-        }
     }
 
     private void HandleTouch()
@@ -67,20 +69,21 @@ public class CameraManager : Singleton<CameraManager>
             Vector2 delta = currentPosition - _lastPointerPosition;
 
             PanCamera(delta);
-
             _lastPointerPosition = currentPosition;
         }
 
         if (touch.press.wasReleasedThisFrame)
-        {
             _isDragging = false;
-        }
     }
 
     private void PanCamera(Vector2 delta)
     {
         Vector3 movement = new Vector3(-delta.x, 0f, -delta.y);
-
         transform.Translate(movement * _panSpeed * Time.deltaTime, Space.World);
+    }
+
+    private void GameplayCamera()
+    {
+        
     }
 }

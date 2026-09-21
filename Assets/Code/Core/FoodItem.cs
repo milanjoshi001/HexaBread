@@ -48,6 +48,7 @@ public class FoodItem : MonoBehaviour
             .setEase(LeanTweenType.easeInBack)
             .setDelay(delay)
             .setOnComplete(() => Destroy(gameObject));
+        InventoryManager.Instance.Inventory.AddFoodIdentity(_foodIdentity, 1);
     }
 
     public enum FoodIdentity
