@@ -46,6 +46,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         GameplayUI.Instance.NextLevelText();
         InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
+        InventoryUI.Instance.UpdateInventoryStorageValues();
     }
     
     private void Home()
@@ -56,5 +57,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         PlayGrid.Instance.Activate(false);
         GameplayUI.Instance.Activate(false);
         MainMenuUI.Instance.Activate(true);
+        GameState.Instance.SetState(GameStateType.Cafe);
+        InventoryUI.Instance.UpdateInventoryStorageValues();
     }
 }

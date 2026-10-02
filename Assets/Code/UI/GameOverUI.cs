@@ -38,6 +38,7 @@ public class GameOverUI : Singleton<GameOverUI>
     {
         InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
+        InventoryUI.Instance.UpdateInventoryStorageValues();
         //GridManager.Instance.LoadGrid(LevelManager.Instance.GetSameLevel().LevelGrid);
     }
     
@@ -46,5 +47,6 @@ public class GameOverUI : Singleton<GameOverUI>
         StackSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
         MainMenuUI.Instance.Activate(true);
+        InventoryUI.Instance.UpdateInventoryStorageValues();
     }
 }
