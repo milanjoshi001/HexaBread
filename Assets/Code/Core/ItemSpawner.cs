@@ -13,7 +13,7 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     protected override void Awake()
     {
-        StackController.OnStackPlaced += StackPlacedCallback;
+        ItemController.OnStackPlaced += StackPlacedCallback;
 
         PowerUpUI.OnStackRegenerate += RegenerateStack;
         MergeManager.OnLastStackPlaced += RegenerateStack;
@@ -26,7 +26,7 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     private void OnDestroy()
     {
-        StackController.OnStackPlaced -= StackPlacedCallback;
+        ItemController.OnStackPlaced -= StackPlacedCallback;
         
         PowerUpUI.OnStackRegenerate -= RegenerateStack;
         MergeManager.OnLastStackPlaced -= RegenerateStack;

@@ -30,14 +30,14 @@ public class MergeManager : Singleton<MergeManager>
     {
         ResetObjectives();
 
-        StackController.OnFoodPlaced += FoodPlaced;
-        StackController.OnFoodSwapped += FoodSwapped;
+        ItemController.OnFoodPlaced += FoodPlaced;
+        ItemController.OnFoodSwapped += FoodSwapped;
     }
 
     private void OnDestroy()
     {
-        StackController.OnFoodPlaced -= FoodPlaced;
-        StackController.OnFoodSwapped -= FoodSwapped;
+        ItemController.OnFoodPlaced -= FoodPlaced;
+        ItemController.OnFoodSwapped -= FoodSwapped;
     }
     
     public void InitializeLevel(int maxMoves)

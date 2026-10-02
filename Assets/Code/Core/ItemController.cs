@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class StackController : MonoBehaviour
+public class ItemController : MonoBehaviour
 {
     [Header("Layers")]
     [SerializeField] private LayerMask _foodLayerMask;
