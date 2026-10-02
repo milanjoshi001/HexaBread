@@ -34,7 +34,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         LevelManager.Instance.NextLevelCounter();
         InputManager.Instance.gameObject.SetActive(false);
         PlayGrid.Instance.ResetGrid();
-        SaveLoadManager.Instance.SaveGame(LevelManager.Instance.CurrentLevel);
+        SaveLoadManager.Instance.SaveGameLevel(LevelManager.Instance.CurrentLevel);
         _canvas.enabled = true;
     }
 

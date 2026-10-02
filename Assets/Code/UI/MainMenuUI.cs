@@ -17,7 +17,7 @@ public class MainMenuUI : Singleton<MainMenuUI>
     
     private void OnEnable()
     {
-        _levelText.SetText($"{SaveLoadManager.Instance.LoadGame() + 1}");
+        _levelText.SetText($"{SaveLoadManager.Instance.LoadGameLevel() + 1}");
     }
 
     private void OnDestroy()

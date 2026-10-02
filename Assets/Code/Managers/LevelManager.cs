@@ -7,18 +7,14 @@ using Random = UnityEngine.Random;
 public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private LevelDataLibrary _levelDataLibrary;
-
-    public LevelDataLibrary LevelDataLibrary => _levelDataLibrary;
-    
     [field: SerializeField] public List<FoodItem.FoodIdentity> AvailableFoodItems { get; private set; }
 
-    public int CurrentLevel => _currentLevelIndex;
-
     private int _currentLevelIndex = 0;
+    public int CurrentLevel => _currentLevelIndex;
     
     private void Start()
     {
-        _currentLevelIndex = SaveLoadManager.Instance.LoadGame();
+        _currentLevelIndex = SaveLoadManager.Instance.LoadGameLevel();
     }
 
     public void NextLevelCounter() => _currentLevelIndex++;

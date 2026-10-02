@@ -4865,7 +4865,7 @@ GameObject:
   - component: {fileID: 1743476225}
   - component: {fileID: 1743476226}
   m_Layer: 0
-  m_Name: StackController
+  m_Name: ItemController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5041,7 +5041,7 @@ GameObject:
   - component: {fileID: 1795742943}
   - component: {fileID: 1795742944}
   m_Layer: 0
-  m_Name: CoinsManager
+  m_Name: CurrencyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

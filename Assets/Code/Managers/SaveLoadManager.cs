@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class SaveLoadManager : Singleton<SaveLoadManager>
 {
-    public void SaveGame(int level)
+    public void SaveGameLevel(int level)
     {
         PlayerPrefs.SetInt("Level", level);
         Debug.Log($"Level saved at {level}");
     }
 
-    public int LoadGame()
+    public int LoadGameLevel()
     {
         Debug.Log($"Loading level {PlayerPrefs.GetInt("Level")}");
         return PlayerPrefs.GetInt("Level");
