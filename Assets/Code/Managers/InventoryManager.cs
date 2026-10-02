@@ -5,11 +5,5 @@ public class InventoryManager : Singleton<InventoryManager>
 {
     public Inventory Inventory {get; private set;}
 
-    private void Start()
-    {
-        Inventory = new Inventory();
-        
-        
-        Inventory.UpgradeInventoryStorageLimit(50);
-    }
+    private void Awake() => Inventory = new Inventory();
 }

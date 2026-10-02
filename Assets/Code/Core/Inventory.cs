@@ -4,7 +4,7 @@ using System.Linq;
 public class Inventory
 {
     public Dictionary<FoodItem.FoodIdentity, int> InventoryByFoodIdentity {get; private set; }  = new ();
-    private int _currentInventoryStorageLimit;
+    private int _currentInventoryStorageLimit = 10;
 
     public int CurrentInventoryStorageLimit => _currentInventoryStorageLimit;
     public int TotalItemsStored {get; private set; }
