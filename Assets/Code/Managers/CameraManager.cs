@@ -84,6 +84,6 @@ public class CameraManager : Singleton<CameraManager>
 
     private void GameplayCamera()
     {
-        
+        transform.position = _cameraPosition;
     }
 }
