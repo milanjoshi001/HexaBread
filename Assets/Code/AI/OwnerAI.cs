@@ -20,6 +20,14 @@ public class OwnerAI : MonoBehaviour
     
     private void Update()
     {
+        if(GameState.Instance.CurrentGameState != GameStateType.Cafe)
+        {
+            _agent.isStopped = true;
+            return;
+        }
+        
+        if(_agent.isStopped) _agent.isStopped = false;
+        
         switch (_state)
         {
             case OwnerState.Idle:
@@ -131,10 +139,10 @@ public class OwnerAI : MonoBehaviour
 
     private void CheckInventoryArrival()
     {
-        
+        var equipment = KitchenEquipments.Instance.Equipments.First(k => k.FoodIdentity == _currentCustomer.CurrentOrder.FoodIdentity);
         _agent.isStopped = false;
-        _agent.SetDestination(KitchenEquipments.Instance.Equipments.First(k => k.FoodIdentity == _currentCustomer.CurrentOrder.FoodIdentity).transform.position);
-        if(Vector3.Distance(transform.position, KitchenEquipments.Instance.Equipments.First(k => k.FoodIdentity == _currentCustomer.CurrentOrder.FoodIdentity).transform.position) < 1.1f)
+        _agent.SetDestination(equipment.transform.position);
+        if(Vector3.Distance(transform.position, equipment.transform.position) < 1.1f)
             SetState(OwnerState.CollectingFood);
     }
 
@@ -143,6 +151,7 @@ public class OwnerAI : MonoBehaviour
         if(_currentCustomer == null) return;
         
         InventoryManager.Instance.Inventory.RemoveFoodIdentity(_currentCustomer.CurrentOrder.FoodIdentity,  _currentCustomer.CurrentOrder.Quantity);
+        InventoryUI.Instance.UpdateInventoryStorageValues();
         SetState(OwnerState.DeliveringFood);
     }
     
