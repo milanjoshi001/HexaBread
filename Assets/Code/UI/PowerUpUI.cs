@@ -61,7 +61,7 @@ public class PowerUpUI : Singleton<PowerUpUI>
     {
         _acceptPowerUpButton.gameObject.SetActive(false);
         ConfirmationPanelActivation(true);
-        StackSpawner.Instance.Activate(false);
+        ItemSpawner.Instance.Activate(false);
         IsStackSwaperOn = true;
         OnSwapStack?.Invoke();
     }
@@ -77,10 +77,10 @@ public class PowerUpUI : Singleton<PowerUpUI>
     private void PowerUpCanceled()
     {
         ConfirmationPanelActivation(false);
-        StackSpawner.Instance.Activate(true);
+        ItemSpawner.Instance.Activate(true);
         IsStackDestroyerOn = false;
         IsStackSwaperOn = false;
-        StackSpawner.Instance.EnableStackParent();
+        ItemSpawner.Instance.EnableStackParent();
         OnPowerUpCanceled?.Invoke();
     }
     

@@ -30,7 +30,7 @@ public class GameplayUI : Singleton<GameplayUI>
     public void InitializeGame()
     {
         Activate(true);
-        StackSpawner.Instance.GenerateStacks();
+        ItemSpawner.Instance.GenerateStacks();
         PlayGrid.Instance.Activate(true);
         MergeManager.Instance.InitializeLevel(_currentLevelData.MaxMoves);
         //TODO: refactor level requirements, currently it's taking 1 amount

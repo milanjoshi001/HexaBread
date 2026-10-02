@@ -1,14 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
 using Code.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class StackSpawner : Singleton<StackSpawner>
+public class ItemSpawner : Singleton<ItemSpawner>
 {
     [Header("Elements")] 
-    [SerializeField] private Transform _stackPosParent;
+    [SerializeField] private Transform _itemPosParent;
     [SerializeField] private List<AllFoodIdentities> _allFoodIdentitiesList;
     
     private int itemCounter;
@@ -35,8 +33,8 @@ public class StackSpawner : Singleton<StackSpawner>
         PowerUpUI.OnStackCollapsed -= DisableStackParent;
     }
 
-    private void DisableStackParent() => _stackPosParent.gameObject.SetActive(false);
-    public void EnableStackParent() => _stackPosParent.gameObject.SetActive(true);
+    private void DisableStackParent() => _itemPosParent.gameObject.SetActive(false);
+    public void EnableStackParent() => _itemPosParent.gameObject.SetActive(true);
 
     private void StackPlacedCallback(GridCell gridCell)
     {
@@ -51,9 +49,9 @@ public class StackSpawner : Singleton<StackSpawner>
 
     public void ResetStacks()
     {
-        for (int i = 0; i < _stackPosParent.childCount; i++)
+        for (int i = 0; i < _itemPosParent.childCount; i++)
         {
-            _stackPosParent.GetChild(i).Clear();
+            _itemPosParent.GetChild(i).Clear();
         }
 
         itemCounter = 0;
@@ -67,9 +65,9 @@ public class StackSpawner : Singleton<StackSpawner>
 
     public void GenerateStacks()
     {
-        for (int i = 0; i < _stackPosParent.childCount; i++)
+        for (int i = 0; i < _itemPosParent.childCount; i++)
         {
-            GenerateStack(_stackPosParent.GetChild(i));
+            GenerateStack(_itemPosParent.GetChild(i));
         }
     }
 
@@ -77,16 +75,16 @@ public class StackSpawner : Singleton<StackSpawner>
     {
         int randomIdentity =  Random.Range(0, _allFoodIdentitiesList.Count);
         
-        FoodItem foodItemInstance = Instantiate(_allFoodIdentitiesList[randomIdentity].foodItemStack, parent);
+        FoodItem foodItemInstance = Instantiate(_allFoodIdentitiesList[randomIdentity].FoodItemStack, parent);
         
     }
 
-    public void Activate(bool value) => _stackPosParent.gameObject.SetActive(value);
+    public void Activate(bool value) => _itemPosParent.gameObject.SetActive(value);
     
     [System.Serializable]
     public struct AllFoodIdentities
     {
         public FoodItem.FoodIdentity FoodIdentity;
-        [FormerlySerializedAs("HexagonStack")] public FoodItem foodItemStack;
+        public FoodItem FoodItemStack;
     }
 }

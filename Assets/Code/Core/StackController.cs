@@ -344,8 +344,8 @@ public class StackController : MonoBehaviour
             PowerUpUI.Instance.ConfirmationPanelActivation(false);
         }
 
-        if (StackSpawner.Instance != null)
-            StackSpawner.Instance.EnableStackParent();
+        if (ItemSpawner.Instance != null)
+            ItemSpawner.Instance.EnableStackParent();
     }
     
     private void ReturnFood()

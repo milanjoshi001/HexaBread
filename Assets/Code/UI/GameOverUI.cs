@@ -44,7 +44,7 @@ public class GameOverUI : Singleton<GameOverUI>
     
     private void Home()
     {
-        StackSpawner.Instance.ResetStacks();
+        ItemSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
         MainMenuUI.Instance.Activate(true);
         InventoryUI.Instance.UpdateInventoryStorageValues();

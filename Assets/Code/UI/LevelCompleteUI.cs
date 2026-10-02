@@ -41,8 +41,8 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
     private void NextLevel()
     {
         IsLevelCompleted = false;
-        StackSpawner.Instance.ResetStacks();
-        StackSpawner.Instance.GenerateStacks();
+        ItemSpawner.Instance.ResetStacks();
+        ItemSpawner.Instance.GenerateStacks();
         GameplayUI.Instance.NextLevelText();
         InputManager.Instance.gameObject.SetActive(true);
         _canvas.enabled = false;
@@ -52,7 +52,7 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
     private void Home()
     {
         IsLevelCompleted = false;
-        StackSpawner.Instance.ResetStacks();
+        ItemSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
         PlayGrid.Instance.Activate(false);
         GameplayUI.Instance.Activate(false);

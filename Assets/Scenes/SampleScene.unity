@@ -977,7 +977,7 @@ GameObject:
   - component: {fileID: 481907708}
   - component: {fileID: 481907707}
   m_Layer: 0
-  m_Name: StackSpawner
+  m_Name: ItemSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -995,16 +995,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97df688b70a89954a975844d87a0e219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stackPosParent: {fileID: 1802805990}
+  _itemPosParent: {fileID: 0}
   _allFoodIdentitiesList:
   - FoodIdentity: 0
-    foodItemStack: {fileID: 1660466581189595803, guid: eaf09c18360c6d9409460d386c23904b, type: 3}
+    FoodItemStack: {fileID: 1660466581189595803, guid: eaf09c18360c6d9409460d386c23904b, type: 3}
   - FoodIdentity: 2
-    foodItemStack: {fileID: 1660466581189595803, guid: 0cbaab9e315714646a530725c3dd34a7, type: 3}
+    FoodItemStack: {fileID: 1660466581189595803, guid: 0cbaab9e315714646a530725c3dd34a7, type: 3}
   - FoodIdentity: 1
-    foodItemStack: {fileID: 1660466581189595803, guid: 325d1835197da274baafbe1917a7d19e, type: 3}
+    FoodItemStack: {fileID: 1660466581189595803, guid: 325d1835197da274baafbe1917a7d19e, type: 3}
   - FoodIdentity: 4
-    foodItemStack: {fileID: 1660466581189595803, guid: b0275f6714b1632408ca50fc35310dff, type: 3}
+    FoodItemStack: {fileID: 1660466581189595803, guid: b0275f6714b1632408ca50fc35310dff, type: 3}
 --- !u!4 &481907708
 Transform:
   m_ObjectHideFlags: 0
@@ -2588,7 +2588,7 @@ GameObject:
   m_Component:
   - component: {fileID: 922248076}
   m_Layer: 0
-  m_Name: StackPos01
+  m_Name: ItemPos01
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3112,51 +3112,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2921886903768881621, guid: 0bc1a8500caff354fa502b4320f1af2f, type: 3}
   m_PrefabInstance: {fileID: 3843065342966873995}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1049467641
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1049467642}
-  - component: {fileID: 1049467643}
-  m_Layer: 0
-  m_Name: LevelManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1049467642
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049467641}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1386253048}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1049467643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049467641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2392a0b591864353837c4f5d77a29da7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LevelHandler
-  _hideGameplay: {fileID: 0}
 --- !u!1 &1082767945
 GameObject:
   m_ObjectHideFlags: 0
@@ -3854,7 +3809,6 @@ Transform:
   m_Children:
   - {fileID: 1802805990}
   - {fileID: 1893730924}
-  - {fileID: 1049467642}
   - {fileID: 1042271823}
   - {fileID: 576545274}
   - {fileID: 4870226}
@@ -4464,7 +4418,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1544483861}
   m_Layer: 0
-  m_Name: StackPos02
+  m_Name: ItemPos02
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -5177,7 +5131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1802805990}
   m_Layer: 0
-  m_Name: StackPositions
+  m_Name: ItemsPositions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5211,7 +5165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1875265929}
   m_Layer: 0
-  m_Name: StackPos00
+  m_Name: ItemPos00
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
