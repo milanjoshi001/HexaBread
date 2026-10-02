@@ -54,10 +54,14 @@ public class LevelCompleteUI : Singleton<LevelCompleteUI>
         IsLevelCompleted = false;
         ItemSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
-        PlayGrid.Instance.Activate(false);
-        GameplayUI.Instance.Activate(false);
-        MainMenuUI.Instance.Activate(true);
-        GameState.Instance.SetState(GameStateType.Cafe);
         InventoryUI.Instance.UpdateInventoryStorageValues();
+        TransitionUI.Instance.StartTransition(() =>
+        {
+            PlayGrid.Instance.Activate(false);
+            GameplayUI.Instance.Activate(false);
+            MainMenuUI.Instance.Activate(true);
+            CafeManager.Instance.Activate(true);
+            GameState.Instance.SetState(GameStateType.Cafe);
+        });
     }
 }

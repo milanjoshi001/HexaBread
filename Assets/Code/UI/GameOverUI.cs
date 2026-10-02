@@ -46,7 +46,12 @@ public class GameOverUI : Singleton<GameOverUI>
     {
         ItemSpawner.Instance.ResetStacks();
         _canvas.enabled = false;
-        MainMenuUI.Instance.Activate(true);
         InventoryUI.Instance.UpdateInventoryStorageValues();
+        
+        TransitionUI.Instance.StartTransition(() =>
+        {
+            MainMenuUI.Instance.Activate(true);
+            CafeManager.Instance.Activate(true);
+        });
     }
 }

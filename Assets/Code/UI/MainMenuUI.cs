@@ -30,6 +30,7 @@ public class MainMenuUI : Singleton<MainMenuUI>
         TransitionUI.Instance.StartTransition(() =>
         {
             GameplayUI.Instance.InitializeGame();
+            CafeManager.Instance.Activate(false);
             gameObject.SetActive(false);
             GameState.Instance.SetState(GameStateType.Gameplay);
         });

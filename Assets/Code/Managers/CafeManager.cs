@@ -15,4 +15,6 @@ public class CafeManager : Singleton<CafeManager>
 
         return null;
     }
+
+    public void Activate(bool value) => gameObject.SetActive(value);
 }
