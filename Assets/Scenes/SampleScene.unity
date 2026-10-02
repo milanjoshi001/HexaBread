@@ -995,7 +995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97df688b70a89954a975844d87a0e219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemPosParent: {fileID: 0}
+  _itemPosParent: {fileID: 1802805990}
   _allFoodIdentitiesList:
   - FoodIdentity: 0
     FoodItemStack: {fileID: 1660466581189595803, guid: eaf09c18360c6d9409460d386c23904b, type: 3}
