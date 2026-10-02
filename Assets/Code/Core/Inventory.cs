@@ -6,6 +6,9 @@ public class Inventory
     public Dictionary<FoodItem.FoodIdentity, int> InventoryByFoodIdentity {get; private set; }  = new ();
     private int _currentInventoryStorageLimit;
 
+    public int CurrentInventoryStorageLimit => _currentInventoryStorageLimit;
+    public int TotalItemsStored {get; private set; }
+
     public void AddFoodIdentity(FoodItem.FoodIdentity foodIdentity, int quantity)
     {
         int currentTotal = InventoryByFoodIdentity.Values.Sum();
@@ -15,6 +18,8 @@ public class Inventory
 
         InventoryByFoodIdentity.TryAdd(foodIdentity, 0);
         InventoryByFoodIdentity[foodIdentity] += quantity;
+        
+        TotalItemsStored += quantity;
     }
 
     public void RemoveFoodIdentity(FoodItem.FoodIdentity foodIdentity, int quantity)
@@ -28,6 +33,8 @@ public class Inventory
             InventoryByFoodIdentity.Remove(foodIdentity);
         else
             InventoryByFoodIdentity[foodIdentity] = storedQuantity;
+        
+        TotalItemsStored -= quantity;
     }
 
     public (FoodItem.FoodIdentity, int)? GetRequiredItemsFromInventory(FoodItem.FoodIdentity foodIdentity, int quantity)
