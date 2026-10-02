@@ -20,6 +20,14 @@ public class CustomerAI : MonoBehaviour
     
     private void Update()
     {
+        if(GameState.Instance.CurrentGameState != GameStateType.Cafe)
+        {
+            _agent.isStopped = true;
+            return;
+        }
+        
+        if(_agent.isStopped) _agent.isStopped = false;
+        
         switch (_state)
         {
             case CustomerState.FindingSeat:
