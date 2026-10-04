@@ -8,6 +8,11 @@ public class PaymentCounter : Singleton<PaymentCounter>
     [SerializeField] private Transform _ownerPoint;
     public Vector3 PayPoint => _payPoint.position;
     public Vector3 OwnerPoint => _ownerPoint.position;
-    
-    public void AddMoney(int amount) => CurrencyManager.Instance.GameCurrency.AddCoins(amount);
+
+    public void AddMoney(int amount)
+    {
+        CurrencyManager.Instance.GameCurrency.AddCoins(amount);
+        
+        CurrencyUI.Instance.UpdateCoinsText();
+    }
 }

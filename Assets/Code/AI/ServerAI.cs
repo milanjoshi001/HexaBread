@@ -4,18 +4,15 @@ using Code.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class OwnerAI : MonoBehaviour
+public class ServerAI : BaseAI<ServerState>
 {
-    [SerializeField] private NavMeshAgent _agent;
-    
-    private OwnerState _state;
     private CustomerAI _currentCustomer;
     private CustomerAI _previousCustomer;
     private List<CustomerAI> _customers = new ();
 
     private void Start()
     {
-        _state = OwnerState.Idle;
+        _state = ServerState.Idle;
     }
     
     private void Update()
@@ -30,35 +27,30 @@ public class OwnerAI : MonoBehaviour
         
         switch (_state)
         {
-            case OwnerState.Idle:
+            case ServerState.Idle:
                 FindCustomer();
                 break;
             
-            case OwnerState.TakingOrder:
+            case ServerState.TakingOrder:
                 TakingOrder();
                 break;
 
-            case OwnerState.CheckingFoodExist:
+            case ServerState.CheckingFoodExist:
                 CheckInventory();
                 break;
             
-            case OwnerState.GoingToInventory:
+            case ServerState.GoingToInventory:
                 CheckInventoryArrival();
                 break;
 
-            case OwnerState.CollectingFood:
+            case ServerState.CollectingFood:
                 CollectFood();
                 break;
 
-            case OwnerState.DeliveringFood:
+            case ServerState.DeliveringFood:
                 CheckCustomerArrival();
                 break;
         }
-    }
-    
-    private void SetState(OwnerState newState)
-    {
-        _state = newState;
     }
     
     private void FindCustomer()
@@ -90,18 +82,18 @@ public class OwnerAI : MonoBehaviour
         
         if(!_currentCustomer.IsSeated)
         {
-            SetState(OwnerState.Idle);
+            SetState(ServerState.Idle);
             return;
         }
         
-        SetState(OwnerState.TakingOrder);
+        SetState(ServerState.TakingOrder);
     }
 
     private void TakingOrder()
     {
         if (_currentCustomer == null)
         {
-            SetState(OwnerState.Idle);
+            SetState(ServerState.Idle);
             return;
         }
         if(_agent.isStopped) _agent.isStopped = false;
@@ -112,7 +104,7 @@ public class OwnerAI : MonoBehaviour
             _agent.isStopped = true;
             _currentCustomer.WaitingToTakeOrder(true);
             _customers.Add(_currentCustomer);
-            SetState(OwnerState.CheckingFoodExist);
+            SetState(ServerState.CheckingFoodExist);
         }
     }
 
@@ -120,7 +112,7 @@ public class OwnerAI : MonoBehaviour
     {
         if (_currentCustomer == null)
         {
-            SetState(OwnerState.Idle);
+            SetState(ServerState.Idle);
             return;
         }
 
@@ -128,12 +120,12 @@ public class OwnerAI : MonoBehaviour
         var inventory = InventoryManager.Instance.Inventory.InventoryByFoodIdentity;
         
         if(inventory.ContainsKey(order.FoodIdentity) && inventory.ContainsValue(order.Quantity))
-            SetState(OwnerState.GoingToInventory);
+            SetState(ServerState.GoingToInventory);
         else
         {
             _agent.isStopped = true;
             _currentCustomer = null;
-            SetState(OwnerState.Idle);
+            SetState(ServerState.Idle);
         }
     }
 
@@ -143,7 +135,7 @@ public class OwnerAI : MonoBehaviour
         _agent.isStopped = false;
         _agent.SetDestination(equipment.transform.position);
         if(Vector3.Distance(transform.position, equipment.transform.position) < 1.1f)
-            SetState(OwnerState.CollectingFood);
+            SetState(ServerState.CollectingFood);
     }
 
     private void CollectFood()
@@ -152,7 +144,7 @@ public class OwnerAI : MonoBehaviour
         
         InventoryManager.Instance.Inventory.RemoveFoodIdentity(_currentCustomer.CurrentOrder.FoodIdentity,  _currentCustomer.CurrentOrder.Quantity);
         InventoryUI.Instance.UpdateInventoryStorageValues();
-        SetState(OwnerState.DeliveringFood);
+        SetState(ServerState.DeliveringFood);
     }
     
     private void CheckCustomerArrival()
@@ -176,7 +168,7 @@ public class OwnerAI : MonoBehaviour
     {
         if (_currentCustomer != null) return;
         
-        SetState(OwnerState.Idle);
+        SetState(ServerState.Idle);
     }
 
     private void TryDeliverFood()
@@ -186,7 +178,7 @@ public class OwnerAI : MonoBehaviour
             if (InventoryManager.Instance.Inventory.InventoryByFoodIdentity.ContainsKey(_customers[i].CurrentOrder.FoodIdentity))
             {
                 _currentCustomer = _customers[i];
-                SetState(OwnerState.GoingToInventory);
+                SetState(ServerState.GoingToInventory);
             }
             else
             {
@@ -198,7 +190,7 @@ public class OwnerAI : MonoBehaviour
 }
 
 [System.Serializable]
-public enum OwnerState
+public enum ServerState
 {
     Idle,
     TakingOrder,

@@ -1,16 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CustomerAI : MonoBehaviour
+public class CustomerAI : BaseAI<CustomerState>
 {
-    [SerializeField] private NavMeshAgent _agent;
-    
-    private CustomerState _state;
     private Seat _assignedSeat;
     private FoodOrder _order;
     
     public FoodOrder CurrentOrder => _order;
-    public CustomerState CurrentState => _state;
     public bool IsSeated { get; private set; }
 
     private void Start()
@@ -54,11 +50,6 @@ public class CustomerAI : MonoBehaviour
                 Leave();
                 break;
         }
-    }
-    
-    private void SetState(CustomerState newState)
-    {
-        _state = newState;
     }
     
     private void FindSeat()
